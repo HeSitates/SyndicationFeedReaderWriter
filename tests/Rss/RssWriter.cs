@@ -2,46 +2,33 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.SyndicationFeed.Rss;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using Xunit;
+using Microsoft.SyndicationFeed.ReaderWriter.Tests.Extentions;
+using Microsoft.SyndicationFeed.Rss;
 
-namespace Microsoft.SyndicationFeed.Tests.Rss
+
+namespace Microsoft.SyndicationFeed.ReaderWriter.Tests.Rss
 {
-    public class RssWriter
+  public class RssWriter : WriterBase
     {
-        sealed class StringWriterWithEncoding : StringWriter
-        {
-            private readonly Encoding _encoding;
-
-            public StringWriterWithEncoding(Encoding encoding)
-            {
-                this._encoding = encoding;
-            }
-
-            public override Encoding Encoding
-            {
-                get { return _encoding; }
-            }
-        }
-
-        [Fact]
+        [Test]
         public async Task WriteCategory()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            var cat1 = new SyndicationCategory("Test Category 1") {
+            var cat1 = new SyndicationCategory("Test Category 1")
+            {
                 Scheme = "http://example.com/test"
             };
 
             var cat2 = new SyndicationCategory("Test Category 2");
 
-            using (var xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -50,17 +37,18 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><category domain=\"{cat1.Scheme}\">{cat1.Name}</category><category>{cat2.Name}</category></channel></rss>");
+            var res = sw.ToString();
+            var expected = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><category domain=\"{cat1.Scheme}\">{cat1.Name}</category><category>{cat2.Name}</category></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WritePerson()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (var xmlWriter = XmlWriter.Create(sw))
-            {                
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
+            {
                 var writer = new RssFeedWriter(xmlWriter);
 
                 await writer.Write(new SyndicationPerson("John Doe", "author@email.com"));
@@ -69,18 +57,19 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><author>author@email.com (John Doe)</author><managingEditor>mEditor@email.com (John Smith)</managingEditor></channel></rss>");
+            var res = sw.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><author>author@email.com (John Doe)</author><managingEditor>mEditor@email.com (John Smith)</managingEditor></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteImage()
         {
-            Uri uri = new Uri("http://testuriforlink.com");
+            var uri = new Uri("http://testuriforlink.com");
 
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (var xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -94,31 +83,33 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><image><url>{uri}</url><title>Testing image title</title><link>{uri}</link><description>testing image description</description></image></channel></rss>");
+            var res = sw.ToString();
+            var expected = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><image><url>{uri}</url><title>Testing image title</title><link>{uri}</link><description>testing image description</description></image></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteLink_onlyUrl()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (var xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
-                
+
                 await writer.Write(new SyndicationLink(new Uri("http://testuriforlink.com")));
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><link>http://testuriforlink.com/</link></channel></rss>");
+            var res = sw.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><link>http://testuriforlink.com/</link></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteLink_allElements()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
             var link = new SyndicationLink(new Uri("http://testuriforlink.com"))
             {
@@ -127,7 +118,7 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 MediaType = "mp3/video"
             };
 
-            using (var xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -135,12 +126,12 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><link url=\"{link.Uri}\" type=\"{link.MediaType}\" length=\"{link.Length}\">{link.Title}</link></channel></rss>");
+            var res = sw.ToString();
+            var expected = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><link url=\"{link.Uri}\" type=\"{link.MediaType}\" length=\"{link.Length}\">{link.Title}</link></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-             
-        [Fact]
+        [Test]
         public async Task WriteItem()
         {
             var url = new Uri("https://contoso.com/");
@@ -176,9 +167,9 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
 
             //
             // Write
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (var xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -186,11 +177,12 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><item><title>First item on ItemWriter</title><link>{url}</link><enclosure url=\"{url}\" length=\"4123\" type=\"audio/mpeg\" /><comments>{url}</comments><source url=\"{url}\">Anonymous Blog</source><guid>{item.Id}</guid><description>Brief description of an item</description><author>person@email.com (John Doe)</author><category>Test Category</category><pubDate>{item.Published.ToRfc1123()}</pubDate></item></channel></rss>", res);
+            var res = sw.ToString();
+            var expected = $"<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><item><title>First item on ItemWriter</title><link>{url}</link><enclosure url=\"{url}\" length=\"4123\" type=\"audio/mpeg\" /><comments>{url}</comments><source url=\"{url}\">Anonymous Blog</source><guid>{item.Id}</guid><description>Brief description of an item</description><author>person@email.com (John Doe)</author><category>Test Category</category><pubDate>{item.Published.ToRfc1123()}</pubDate></item></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteContent()
         {
             ISyndicationContent content = null;
@@ -199,15 +191,15 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
             // Read
             using (var xmlReader = XmlReader.Create(@"..\..\..\TestFeeds\CustomXml.xml"))
             {
-                RssFeedReader reader = new RssFeedReader(xmlReader);
+                var reader = new RssFeedReader(xmlReader);
                 content = await reader.ReadContent();
             }
 
             //
             // Write
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            using (var xmlWriter = XmlWriter.Create(sb))
+            await using (var xmlWriter = XmlWriter.Create(sb, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -215,16 +207,17 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sb.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-16\"?><rss version=\"2.0\"><channel><NewItem><enclosure url=\"http://www.scripting.com/mp3s/weatherReportSuite.mp3\" length=\"12216320\" type=\"audio/mpeg\" /><title>Lorem ipsum 2017-07-06T20:25:00+00:00</title><description>Exercitation sit dolore mollit et est eiusmod veniam aute officia veniam ipsum.</description><link>http://example.com/test/1499372700</link><guid isPermaLink=\"true\">http://example.com/test/1499372700</guid><pubDate>Thu, 06 Jul 2017 20:25:00 GMT</pubDate></NewItem></channel></rss>");
+            var res = sb.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?><rss version=\"2.0\"><channel><NewItem><enclosure url=\"http://www.scripting.com/mp3s/weatherReportSuite.mp3\" length=\"12216320\" type=\"audio/mpeg\" /><title>Lorem ipsum 2017-07-06T20:25:00+00:00</title><description>Exercitation sit dolore mollit et est eiusmod veniam aute officia veniam ipsum.</description><link>http://example.com/test/1499372700</link><guid isPermaLink=\"true\">http://example.com/test/1499372700</guid><pubDate>Thu, 06 Jul 2017 20:25:00 GMT</pubDate></NewItem></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteValue()
         {
             var sb = new StringBuilder();
 
-            using (var xmlWriter = XmlWriter.Create(sb))
+            await using (var xmlWriter = XmlWriter.Create(sb, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -233,15 +226,16 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
             }
 
             var res = sb.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-16\"?><rss version=\"2.0\"><channel><CustomTag>Custom Content</CustomTag></channel></rss>");
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?><rss version=\"2.0\"><channel><CustomTag>Custom Content</CustomTag></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteCDATAValue()
         {
             var sb = new StringBuilder();
 
-            using (var xmlWriter = XmlWriter.Create(sb))
+            await using (var xmlWriter = XmlWriter.Create(sb, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter, null, new RssFormatter() { UseCDATA = true });
 
@@ -250,10 +244,11 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
             }
 
             var res = sb.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-16\"?><rss version=\"2.0\"><channel><title><![CDATA[<h1>HTML Title</h1>]]></title></channel></rss>");
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?><rss version=\"2.0\"><channel><title><![CDATA[<h1>HTML Title</h1>]]></title></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task Echo()
         {
             string res = null;
@@ -261,9 +256,9 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
             {
                 var reader = new RssFeedReader(xmlReader);
 
-                var sw = new StringWriterWithEncoding(Encoding.UTF8);
+                await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-                using (var xmlWriter = XmlWriter.Create(sw))
+                await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
                 {
                     var writer = new RssFeedWriter(xmlWriter);
 
@@ -293,25 +288,26 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 }
 
                 res = sw.ToString();
-                Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><title asd=\"123\">Lorem ipsum feed for an interval of 1 minutes</title><description>This is a constantly updating lorem ipsum feed</description><link length=\"123\" type=\"testType\">http://example.com/</link><image><url>http://2.bp.blogspot.com/-NA5Jb-64eUg/URx8CSdcj_I/AAAAAAAAAUo/eCx0irI0rq0/s1600/bg_Microsoft_logo3-20120824073001907469-620x349.jpg</url><title>Microsoft News</title><link>http://www.microsoft.com/news</link><description>Test description</description></image><generator>RSS for Node</generator><lastBuildDate>Thu, 06 Jul 2017 20:25:17 GMT</lastBuildDate><managingEditor>John Smith</managingEditor><pubDate>Thu, 06 Jul 2017 20:25:00 GMT</pubDate><copyright>Michael Bertolacci, licensed under a Creative Commons Attribution 3.0 Unported License.</copyright><ttl>60</ttl><item><title>Lorem ipsum 2017-07-06T20:25:00+00:00</title><enclosure url=\"http://www.scripting.com/mp3s/weatherReportSuite.mp3\" length=\"12216320\" type=\"audio/mpeg\" /><link>http://example.com/test/1499372700</link><guid>http://example.com/test/1499372700</guid><description>Exercitation sit dolore mollit et est eiusmod veniam aute officia veniam ipsum.</description><author>John Smith</author><pubDate>Thu, 06 Jul 2017 20:25:00 GMT</pubDate></item><item><title>Lorem ipsum 2017-07-06T20:24:00+00:00</title><link>http://example.com/test/1499372640</link><guid>http://example.com/test/1499372640</guid><enclosure url=\"http://www.scripting.com/mp3s/weatherReportSuite.mp3\" length=\"12216320\" type=\"audio/mpeg\" /><description>Do ipsum dolore veniam minim est cillum aliqua ea.</description><author>John Smith</author><pubDate>Thu, 06 Jul 2017 20:24:00 GMT</pubDate></item></channel></rss>");
+                var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><title asd=\"123\">Lorem ipsum feed for an interval of 1 minutes</title><description>This is a constantly updating lorem ipsum feed</description><link length=\"123\" type=\"testType\">http://example.com/</link><image><url>http://2.bp.blogspot.com/-NA5Jb-64eUg/URx8CSdcj_I/AAAAAAAAAUo/eCx0irI0rq0/s1600/bg_Microsoft_logo3-20120824073001907469-620x349.jpg</url><title>Microsoft News</title><link>http://www.microsoft.com/news</link><description>Test description</description></image><generator>RSS for Node</generator><lastBuildDate>Thu, 06 Jul 2017 20:25:17 GMT</lastBuildDate><managingEditor>John Smith</managingEditor><pubDate>Thu, 06 Jul 2017 20:25:00 GMT</pubDate><copyright>Michael Bertolacci, licensed under a Creative Commons Attribution 3.0 Unported License.</copyright><ttl>60</ttl><item><title>Lorem ipsum 2017-07-06T20:25:00+00:00</title><enclosure url=\"http://www.scripting.com/mp3s/weatherReportSuite.mp3\" length=\"12216320\" type=\"audio/mpeg\" /><link>http://example.com/test/1499372700</link><guid>http://example.com/test/1499372700</guid><description>Exercitation sit dolore mollit et est eiusmod veniam aute officia veniam ipsum.</description><author>John Smith</author><pubDate>Thu, 06 Jul 2017 20:25:00 GMT</pubDate></item><item><title>Lorem ipsum 2017-07-06T20:24:00+00:00</title><link>http://example.com/test/1499372640</link><guid>http://example.com/test/1499372640</guid><enclosure url=\"http://www.scripting.com/mp3s/weatherReportSuite.mp3\" length=\"12216320\" type=\"audio/mpeg\" /><description>Do ipsum dolore veniam minim est cillum aliqua ea.</description><author>John Smith</author><pubDate>Thu, 06 Jul 2017 20:24:00 GMT</pubDate></item></channel></rss>";
+                Assert.That(res, Is.EqualTo(expected));
             }
 
             await RssReader.TestReadFeedElements(XmlReader.Create(new StringReader(res)));
         }
 
-        [Fact]
+        [Test]
         public async Task CompareContents()
         {
-            string filePath = @"..\..\..\TestFeeds\internetRssFeed.xml";
+            var filePath = @"..\..\..\TestFeeds\internetRssFeed.xml";
             string res = null;
 
             using (var xmlReader = XmlReader.Create(filePath, new XmlReaderSettings() { Async = true }))
             {
                 var reader = new RssFeedReader(xmlReader);
 
-                var sw = new StringWriterWithEncoding(Encoding.UTF8);
+                await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-                using (var xmlWriter = XmlWriter.Create(sw))
+                await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
                 {
                     var writer = new RssFeedWriter(xmlWriter);
 
@@ -343,16 +339,16 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 res = sw.ToString();
             }
 
-            await CompareFeeds(new RssFeedReader(XmlReader.Create(filePath)), 
+            await CompareFeeds(new RssFeedReader(XmlReader.Create(filePath)),
                                new RssFeedReader(XmlReader.Create(new StringReader(res))));
-            
+
         }
 
         private async Task CompareFeeds(ISyndicationFeedReader f1, ISyndicationFeedReader f2)
         {
             while (await f1.Read() && await f2.Read())
             {
-                Assert.True(f1.ElementType == f2.ElementType);
+                Assert.That(f1.ElementType, Is.EqualTo(f2.ElementType));
 
                 switch (f1.ElementType)
                 {
@@ -375,15 +371,14 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
             }
         }
 
-        [Fact]
+        [Test]
         public async Task WriteNamespaces()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (XmlWriter xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
-                var writer = new RssFeedWriter(xmlWriter, 
-                                                 new SyndicationAttribute[] { new SyndicationAttribute("xmlns:content", "http://contoso.com/")});
+                var writer = new RssFeedWriter(xmlWriter, new SyndicationAttribute[] { new("xmlns:content", "http://contoso.com/") });
 
                 await writer.Write(new SyndicationContent("hello", "http://contoso.com/", "world"));
                 await writer.Write(new SyndicationContent("world", "http://contoso.com/", "hello"));
@@ -391,16 +386,17 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss xmlns:content=\"http://contoso.com/\" version=\"2.0\"><channel><content:hello>world</content:hello><content:world>hello</content:world></channel></rss>");
+            var res = sw.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss xmlns:content=\"http://contoso.com/\" version=\"2.0\"><channel><content:hello>world</content:hello><content:world>hello</content:world></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteCloud()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (XmlWriter xmlWriter = XmlWriter.Create(sw))
+            await using (XmlWriter xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -409,16 +405,17 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><cloud domain=\"podcast.contoso.com\" port=\"80\" path=\"/rpc\" registerProcedure=\"xmlStorageSystem.rssPleaseNotify\" protocol=\"xml-rpc\" /></channel></rss>");
+            var res = sw.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><cloud domain=\"podcast.contoso.com\" port=\"80\" path=\"/rpc\" registerProcedure=\"xmlStorageSystem.rssPleaseNotify\" protocol=\"xml-rpc\" /></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteSkipDays()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (XmlWriter xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -427,16 +424,17 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><skipDays><day>Friday</day><day>Monday</day></skipDays></channel></rss>");
+            var res = sw.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><skipDays><day>Friday</day><day>Monday</day></skipDays></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
-        [Fact]
+        [Test]
         public async Task WriteSkipHours()
         {
-            var sw = new StringWriterWithEncoding(Encoding.UTF8);
+            await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-            using (XmlWriter xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var writer = new RssFeedWriter(xmlWriter);
 
@@ -445,43 +443,45 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 await writer.Flush();
             }
 
-            string res = sw.ToString();
-            Assert.True(res == "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><skipHours><hour>0</hour><hour>4</hour><hour>1</hour><hour>11</hour><hour>23</hour><hour>20</hour></skipHours></channel></rss>");
+            var res = sw.ToString();
+            var expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><skipHours><hour>0</hour><hour>4</hour><hour>1</hour><hour>11</hour><hour>23</hour><hour>20</hour></skipHours></channel></rss>";
+            Assert.That(res, Is.EqualTo(expected));
         }
 
         void ComparePerson(ISyndicationPerson person1, ISyndicationPerson person2)
         {
-            Assert.True(person1.Email == person2.Email);
-            Assert.True(person1.RelationshipType == person2.RelationshipType);
+            Assert.That(person1.Email, Is.EqualTo(person2.Email));
+            Assert.That(person1.RelationshipType, Is.EqualTo(person2.RelationshipType));
         }
 
         void CompareImage(ISyndicationImage image1, ISyndicationImage image2)
         {
-            Assert.True(image1.RelationshipType == image2.RelationshipType);
-            Assert.True(image1.Url == image2.Url);
-            Assert.True(image1.Link.Uri.ToString() == image2.Link.Uri.ToString());
-            Assert.True(image1.Description == image2.Description);
+            Assert.That(image1.RelationshipType, Is.EqualTo(image2.RelationshipType));
+            Assert.That(image1.Url, Is.EqualTo(image2.Url));
+            Assert.That(image1.Link.Uri.ToString(), Is.EqualTo(image2.Link.Uri.ToString()));
+            //Assert.That(image1.Link.Uri, Is.EqualTo(image2.Link.Uri));
+            Assert.That(image1.Description, Is.EqualTo(image2.Description));
         }
 
         void CompareItem(ISyndicationItem item1, ISyndicationItem item2)
         {
-            Assert.True(item1.Id == item2.Id);
-            Assert.True(item1.Title == item2.Title);
-            Assert.True(item1.LastUpdated == item2.LastUpdated);
+            Assert.That(item1.Id, Is.EqualTo(item2.Id));
+            Assert.That(item1.Title, Is.EqualTo(item2.Title));
+            Assert.That(item1.LastUpdated, Is.EqualTo(item2.LastUpdated));
 
         }
 
         void CompareContent(ISyndicationContent content1, ISyndicationContent content2)
         {
-            Assert.True(content1.Name == content2.Name);
+            Assert.That(content1.Name, Is.EqualTo(content2.Name));
 
             //Compare attributes
             foreach (var a in content1.Attributes)
             {
                 var a2 = content2.Attributes.Single(att => att.Name == a.Name);
-                Assert.True(a.Name == a2.Name);
-                Assert.True(a.Namespace == a2.Namespace);
-                Assert.True(a.Value == a2.Value);
+                Assert.That(a.Name, Is.EqualTo(a2.Name));
+                Assert.That(a.Namespace, Is.EqualTo(a2.Namespace));
+                Assert.That(a.Value, Is.EqualTo(a2.Value));
             }
 
             //Compare fields
@@ -491,16 +491,16 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
                 CompareContent(f, f2);
             }
 
-            Assert.True(content1.Value == content2.Value);
+            Assert.That(content1.Value, Is.EqualTo(content2.Value));
         }
 
-        [Fact]
+        [Test]
         public async Task FormatterWriterWithNamespaces()
         {
             const string ExampleNs = "http://contoso.com/syndication/feed/examples";
-            var sw = new StringWriter();
+            await using var sw = new StringWriter();
 
-            using (var xmlWriter = XmlWriter.Create(sw))
+            await using (var xmlWriter = XmlWriter.Create(sw, XmlWriterSettings))
             {
                 var attributes = new SyndicationAttribute[] { new SyndicationAttribute("xmlns:example", ExampleNs) };
 
@@ -534,14 +534,6 @@ namespace Microsoft.SyndicationFeed.Tests.Rss
             }
 
             string res = sw.ToString();
-        }
-    }
-
-    static class DateTimeOffsetExtentions
-    {
-        public static string ToRfc1123(this DateTimeOffset dto)
-        {
-            return dto.ToString("r");
         }
     }
 }
