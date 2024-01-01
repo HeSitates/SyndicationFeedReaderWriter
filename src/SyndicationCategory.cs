@@ -3,20 +3,20 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Microsoft.SyndicationFeed.Interfaces;
 
-namespace Microsoft.SyndicationFeed
+namespace Microsoft.SyndicationFeed;
+
+public sealed class SyndicationCategory : ISyndicationCategory
 {
-    public sealed class SyndicationCategory : ISyndicationCategory
-    {
-        public SyndicationCategory(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+  public SyndicationCategory(string name)
+  {
+    Name = name ?? throw new ArgumentNullException(nameof(name));
+  }
 
-        public string Name { get; private set; }
+  public string Name { get; }
 
-        public string Label { get; set; }
+  public string Label { get; set; }
 
-        public string Scheme { get; set; }
-    }
+  public string Scheme { get; set; }
 }

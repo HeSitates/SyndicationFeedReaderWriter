@@ -3,27 +3,27 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Microsoft.SyndicationFeed.Interfaces;
 
-namespace Microsoft.SyndicationFeed
+namespace Microsoft.SyndicationFeed;
+
+public sealed class SyndicationLink : ISyndicationLink
 {
-    public sealed class SyndicationLink : ISyndicationLink
-    {
-        public SyndicationLink(Uri url, string relationshipType = null)
-        {
-            Uri = url ?? throw new ArgumentNullException(nameof(url));
-            RelationshipType = relationshipType;
-        }
+  public SyndicationLink(Uri url, string relationshipType = null)
+  {
+    Uri = url ?? throw new ArgumentNullException(nameof(url));
+    RelationshipType = relationshipType;
+  }
 
-        public Uri Uri { get; private set; }
+  public Uri Uri { get; }
 
-        public string Title { get; set; }
+  public string Title { get; set; }
 
-        public string MediaType { get; set; }
+  public string MediaType { get; set; }
 
-        public string RelationshipType { get; }
+  public string RelationshipType { get; }
 
-        public long Length { get; set; }
+  public long Length { get; set; }
 
-        public DateTimeOffset LastUpdated { get; set; }
-    }
+  public DateTimeOffset LastUpdated { get; set; }
 }

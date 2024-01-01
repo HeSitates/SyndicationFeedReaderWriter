@@ -2,14 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.SyndicationFeed;
-using Microsoft.SyndicationFeed.Rss;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.SyndicationFeed;
+using Microsoft.SyndicationFeed.Rss;
 
 
 /// <summary>
@@ -22,7 +22,7 @@ class RssWriteItemWithCustomElement
         const string ExampleNs = "http://contoso.com/syndication/feed/examples";
         var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-        using (XmlWriter xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true, Indent = true }))
+        using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true, Indent = true }))
         {
             var attributes = new List<SyndicationAttribute>()
             {
@@ -55,7 +55,7 @@ class RssWriteItemWithCustomElement
             await writer.Write(content);
 
             // Done
-            xmlWriter.Flush();
+            await xmlWriter.FlushAsync();
         }
 
         Console.WriteLine(sw.ToString());

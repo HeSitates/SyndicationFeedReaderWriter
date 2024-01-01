@@ -4,13 +4,12 @@
 
 using System;
 
-namespace Microsoft.SyndicationFeed
+namespace Microsoft.SyndicationFeed.Utils;
+
+internal static class UriUtils
 {
-    static class UriUtils
-    {
-        public static bool TryParse(string value, out Uri result)
-        {
-            return Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out result);
-        }
-    }
+  public static bool TryParse(string value, out Uri result)
+  {
+    return Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out result);
+  }
 }
