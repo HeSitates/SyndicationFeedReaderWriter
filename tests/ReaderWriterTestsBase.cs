@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.SyndicationFeed.Interfaces;
 using Microsoft.SyndicationFeed.Rss;
+using Microsoft.XmlDiffPatch;
 
 namespace Microsoft.SyndicationFeed.ReaderWriter.Tests;
 
@@ -70,8 +71,44 @@ public class ReaderWriterTestsBase
     }
   }
 
-  protected sealed class StringWriterWithEncoding(Encoding encoding) : StringWriter
+  protected static async Task CompareXml(string result, string expectedResult)
   {
-    public override Encoding Encoding { get; } = encoding;
+    await using var sw = new StringWriterWithEncoding();
+    var diff = new XmlDiff();
+
+    using var actual = new StringReader(result);
+    using var expected = new StringReader(expectedResult);
+    using var xmlReaderActual = XmlReader.Create(actual, new XmlReaderSettings { Async = true });
+    using var xmlReaderExpected = XmlReader.Create(expected, new XmlReaderSettings { Async = true });
+
+    bool isEqual;
+    await using (var writer = XmlWriter.Create(sw, new XmlWriterSettings { Async = true, Indent = true }))
+    {
+      isEqual = diff.Compare(xmlReaderActual, xmlReaderExpected, writer);
+    }
+
+    var res = sw.ToString();
+    if (!isEqual)
+    {
+      TestContext.WriteLine(res);
+    }
+
+    Assert.That(isEqual, Is.True);
+  }
+
+  protected sealed class StringWriterWithEncoding : StringWriter
+  {
+    public StringWriterWithEncoding()
+      : this(Encoding.UTF8)
+    {
+      // Intentionally left empty.
+    }
+
+    public StringWriterWithEncoding(Encoding encoding)
+    {
+      Encoding = encoding;
+    }
+
+    public override Encoding Encoding { get; }
   }
 }

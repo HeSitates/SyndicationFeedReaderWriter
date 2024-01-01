@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:example="http://contoso.com/syndication/feed/examples" version="2.0">
+  <channel>
+  <item>
+    <title>Rss Writer Available</title>
+    <description>The new RSS Writer is now open source!</description>
+    <author>test@mail.com</author>
+    <category>Technology</category>
+    <guid isPermaLink="false">https://github.com/dotnet/wcf/tree/lab/lab/src/Microsoft.SyndicationFeed/src</guid>
+    <pubDate>Mon, 01 Jan 2024 14:44:25 GMT</pubDate>
+    <example:customElement>Custom Value</example:customElement>
+  </item>
+  <item>
+    <title>Rss Writer Available</title>
+    <description>The new RSS Writer is now open source!</description>
+    <author>test@mail.com</author>
+    <category>Technology</category>
+    <guid isPermaLink="false">https://github.com/dotnet/wcf/tree/lab/lab/src/Microsoft.SyndicationFeed/src</guid>
+    <pubDate>Mon, 01 Jan 2024 14:44:25 GMT</pubDate>
+    <example:customElement>Custom Value</example:customElement>
+  </item></channel>
+</rss>

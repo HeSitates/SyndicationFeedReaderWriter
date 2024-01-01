@@ -130,6 +130,9 @@
   <data name="rss20_2items" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>TestFeeds\rss20-2items.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="RssFormatterWriterWithNamespacesResult" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TestFeeds\RssFormatterWriterWithNamespacesResult.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="simpleAtomFeed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>TestFeeds\simpleAtomFeed.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

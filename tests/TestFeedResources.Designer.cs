@@ -126,6 +126,25 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+        ///&lt;rss xmlns:example=&quot;http://contoso.com/syndication/feed/examples&quot; version=&quot;2.0&quot;&gt;
+        ///  &lt;channel&gt;
+        ///  &lt;item&gt;
+        ///    &lt;title&gt;Rss Writer Available&lt;/title&gt;
+        ///    &lt;description&gt;The new RSS Writer is now open source!&lt;/description&gt;
+        ///    &lt;author&gt;test@mail.com&lt;/author&gt;
+        ///    &lt;category&gt;Technology&lt;/category&gt;
+        ///    &lt;guid isPermaLink=&quot;false&quot;&gt;https://github.com/dotnet/wcf/tree/lab/lab/src/Microsoft.SyndicationFeed/src&lt;/guid&gt;
+        ///    &lt;pubDate&gt;Mon, 01 Jan 2024 14:44:25 GMT&lt;/pubDate&gt;
+        ///    &lt;example [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RssFormatterWriterWithNamespacesResult {
+            get {
+                return ResourceManager.GetString("RssFormatterWriterWithNamespacesResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;feed xmlns=&quot;http://www.w3.org/2005/Atom&quot; xmlns:atom10=&quot;http://www.w3.org/2005/Atom&quot;&gt;
         ///  &lt;title type=&quot;text&quot;&gt;dive into mark&lt;/title&gt;

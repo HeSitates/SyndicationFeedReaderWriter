@@ -372,7 +372,7 @@ public class RssWriterTests : ReaderWriterTestsBase
   {
     await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
-    await using (XmlWriter xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
+    await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
       var writer = new RssFeedWriter(xmlWriter);
 
@@ -428,7 +428,7 @@ public class RssWriterTests : ReaderWriterTestsBase
   public async Task FormatterWriterWithNamespaces()
   {
     const string ExampleNs = "http://contoso.com/syndication/feed/examples";
-    await using var sw = new StringWriter();
+    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true, Indent = true }))
     {
@@ -443,13 +443,12 @@ public class RssWriterTests : ReaderWriterTestsBase
         Title = "Rss Writer Available",
         Description = "The new RSS Writer is now open source!",
         Id = "https://github.com/dotnet/wcf/tree/lab/lab/src/Microsoft.SyndicationFeed/src",
-        Published = DateTimeOffset.UtcNow
+        Published = new DateTimeOffset(new DateTime(2024, 1, 1, 14, 44, 25, DateTimeKind.Utc))
       };
 
       item.AddCategory(new SyndicationCategory("Technology"));
       item.AddContributor(new SyndicationPerson(null, "test@mail.com"));
 
-      //
       // Format the item as SyndicationContent
       var content = new SyndicationContent(formatter.CreateContent(item));
 
@@ -464,7 +463,8 @@ public class RssWriterTests : ReaderWriterTestsBase
     }
 
     var res = sw.ToString();
-    TestContext.WriteLine(res);
+
+    await CompareXml(res, TestFeedResources.RssFormatterWriterWithNamespacesResult);
   }
 
   private static async Task CompareFeeds(RssFeedReader f1, RssFeedReader f2)

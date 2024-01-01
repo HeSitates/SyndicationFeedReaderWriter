@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.SyndicationFeed.Atom;
@@ -20,7 +19,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
   {
     var category = new SyndicationCategory("Test Category");
 
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
@@ -38,7 +37,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
   [Test]
   public async Task WritePerson()
   {
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     var p1 = new SyndicationPerson("John Doe", "johndoe@contoso.com");
     var p2 = new SyndicationPerson("Jane Doe", "janedoe@contoso.com", AtomContributorTypes.Contributor)
@@ -67,7 +66,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
     var icon = new SyndicationImage(new Uri("http://contoso.com/icon.ico"), AtomImageTypes.Icon);
     var logo = new SyndicationImage(new Uri("http://contoso.com/logo.png"), AtomImageTypes.Logo);
 
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
@@ -87,7 +86,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
   [Test]
   public async Task WriteLink()
   {
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     var link = new SyndicationLink(new Uri("http://contoso.com"))
     {
@@ -155,7 +154,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
 
     //
     // Write
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
@@ -177,7 +176,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
     var id = Guid.NewGuid();
     var updated = DateTimeOffset.UtcNow.AddDays(-21);
 
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
@@ -202,7 +201,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
     const string Version = "1.0";
     const string Generator = "Example Toolkit";
 
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
@@ -221,25 +220,25 @@ public class AtomWriterTests : ReaderWriterTestsBase
   [Test]
   public async Task WritePrefixedAtomNs()
   {
-    const string title = "Example Feed";
-    const string uri = "https://contoso.com/generator";
-    const string generator = "Example Toolkit";
+    const string Title = "Example Feed";
+    const string Uri = "https://contoso.com/generator";
+    const string Generator = "Example Toolkit";
 
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
       var writer = new AtomFeedWriter(xmlWriter,
         new ISyndicationAttribute[] { new SyndicationAttribute("xmlns:atom", "http://www.w3.org/2005/Atom") });
 
-      await writer.WriteTitle(title);
-      await writer.WriteGenerator(generator, uri, null);
+      await writer.WriteTitle(Title);
+      await writer.WriteGenerator(Generator, Uri, null);
 
       await writer.Flush();
     }
 
     var res = sw.ToString();
-    var (expected, prefix) = ($"<atom:title>{title}</atom:title><atom:generator uri=\"{uri}\">{generator}</atom:generator>", "atom");
+    var (expected, prefix) = ($"<atom:title>{Title}</atom:title><atom:generator uri=\"{Uri}\">{Generator}</atom:generator>", "atom");
     Assert.That(res, Is.EqualTo(CreateExpectedResult(expected, prefix)));
   }
 
@@ -256,7 +255,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
     };
     entry.AddContributor(author);
 
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
@@ -291,7 +290,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
   [Test]
   public async Task WriteXhtmlTextConstruct()
   {
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     const string Content = "<h1><b href=\"foo\">Heading</b><br foo=\"bar\" /></h1><br />";
 
@@ -312,7 +311,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
   [Test]
   public async Task WriteXmlContent()
   {
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     const string Content = "<h1 xmlns=\"boooo\"><b href=\"foo\">Heading</b><br foo=\"bar\" /></h1><br xmlns=\"\" />";
 
@@ -334,7 +333,7 @@ public class AtomWriterTests : ReaderWriterTestsBase
   public async Task WriteCDataValue()
   {
     const string Title = "Title & Markup";
-    await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
+    await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
     {
