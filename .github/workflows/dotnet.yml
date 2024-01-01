@@ -20,12 +20,21 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+
     - name: Restore dependencies
       run: dotnet restore
+
+    - name: Sonarqube Begin
+      run: | 
+        dotnet tool install --global dotnet-sonarscanner
+        dotnet sonarscanner begin /o:"${{ vars.SONARORGANIZATIONKEY }}" /k:"${{ vars.SONARPROJECTKEY }}" /d:sonar.login=${{ secrets.SONAR_TOKEN }} /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
+
     - name: Build
       run: dotnet build --no-restore
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
     - name: Sonarqube end
       run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       env:
