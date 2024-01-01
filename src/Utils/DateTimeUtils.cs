@@ -7,28 +7,29 @@ namespace Microsoft.SyndicationFeed.Utils;
 internal static class DateTimeUtils
 {
   private const string Rfc3339LocalDateTimeFormat = "yyyy-MM-ddTHH:mm:sszzz";
-  private const string Rfc3339UTCDateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
+  private const string Rfc3339UtcDateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
 
   public static bool TryParseDate(string value, out DateTimeOffset result)
   {
+    if (string.IsNullOrWhiteSpace(value))
+    {
+      result = default;
+      return false;
+    }
+
     if (TryParseDateRfc3339(value, out result))
     {
       return true;
     }
 
-    if (TryParseDateRssSpec(value, out result))
-    {
-      return true;
-    }
-
-    return false;
+    return TryParseDateRssSpec(value, out result);
   }
 
   public static string ToRfc3339String(DateTimeOffset dto)
   {
     if (dto.Offset == TimeSpan.Zero)
     {
-      return dto.ToUniversalTime().ToString(Rfc3339UTCDateTimeFormat, CultureInfo.InvariantCulture);
+      return dto.ToUniversalTime().ToString(Rfc3339UtcDateTimeFormat, CultureInfo.InvariantCulture);
     }
     else
     {
@@ -41,69 +42,48 @@ internal static class DateTimeUtils
     return dto.ToString("r");
   }
 
-  private static bool TryParseDateRssSpec(string value, out DateTimeOffset result)
+  internal static void CollapseWhitespaces(StringBuilder builder)
   {
-    if (string.IsNullOrEmpty(value))
+    var index = 0;
+    var whiteSpaceStart = -1;
+    while (index < builder.Length)
     {
-      return false;
+      if (char.IsWhiteSpace(builder[index]))
+      {
+        if (whiteSpaceStart < 0)
+        {
+          whiteSpaceStart = index;
+          // normalize all white spaces to be ' ' so that the date time parsing works
+          builder[index] = ' ';
+        }
+      }
+      else if (whiteSpaceStart >= 0)
+      {
+#pragma warning disable S2583
+        if (index > whiteSpaceStart + 1)
+#pragma warning restore S2583
+        {
+          // there are at least 2 spaces... replace by 1
+          builder.Remove(whiteSpaceStart, index - whiteSpaceStart - 1);
+          index = whiteSpaceStart + 1;
+        }
+
+        whiteSpaceStart = -1;
+      }
+
+      ++index;
     }
-
-    StringBuilder sb = new StringBuilder(value.Trim());
-
-    if (sb.Length < 18)
-    {
-      return false;
-    }
-
-    if (sb[3] == ',')
-    {
-      // There is a leading (e.g.) "Tue, ", strip it off
-      sb.Remove(0, 4);
-
-      // There's supposed to be a space here but some implementations dont have one
-      TrimStart(sb);
-    }
-
-    CollapseWhitespaces(sb);
-
-    if (!char.IsDigit(sb[1]))
-    {
-      sb.Insert(0, '0');
-    }
-
-    if (sb.Length < 19)
-    {
-      return false;
-    }
-
-    bool thereAreSeconds = (sb[17] == ':');
-    int timeZoneStartIndex = thereAreSeconds ? 21 : 18;
-
-    string timeZoneSuffix = sb.ToString().Substring(timeZoneStartIndex);
-    sb.Remove(timeZoneStartIndex, sb.Length - timeZoneStartIndex);
-
-    bool isUtc;
-    sb.Append(NormalizeTimeZone(timeZoneSuffix, out isUtc));
-
-    string wellFormattedString = sb.ToString();
-
-    string parseFormat = thereAreSeconds ? "dd MMM yyyy HH:mm:ss zzz" : "dd MMM yyyy HH:mm zzz";
-
-    return DateTimeOffset.TryParseExact(wellFormattedString,
-                                        parseFormat,
-                                        CultureInfo.InvariantCulture.DateTimeFormat,
-                                        isUtc ? DateTimeStyles.AdjustToUniversal : DateTimeStyles.None,
-                                        out result);
   }
 
-  private static string NormalizeTimeZone(string rfc822TimeZone, out bool isUtc)
+  internal static string NormalizeTimeZone(string rfc822TimeZone, out bool isUtc)
   {
     isUtc = false;
+
     // return a string in "-08:00" format
     if (rfc822TimeZone[0] == '+' || rfc822TimeZone[0] == '-')
     {
       // the time zone is supposed to be 4 digits but some feeds omit the initial 0
-      StringBuilder result = new StringBuilder(rfc822TimeZone);
+      var result = new StringBuilder(rfc822TimeZone);
       if (result.Length == 4)
       {
         // the timezone is +/-HMM. Convert to +/-HHMM
@@ -112,6 +92,7 @@ internal static class DateTimeUtils
       result.Insert(3, ':');
       return result.ToString();
     }
+
     switch (rfc822TimeZone)
     {
       case "UT":
@@ -181,9 +162,65 @@ internal static class DateTimeUtils
     }
   }
 
+  private static bool TryParseDateRssSpec(string value, out DateTimeOffset result)
+  {
+    if (string.IsNullOrEmpty(value))
+    {
+      return false;
+    }
+
+    var sb = new StringBuilder(value.Trim());
+
+    if (sb.Length < 18)
+    {
+      return false;
+    }
+
+    if (sb[3] == ',')
+    {
+      // There is a leading (e.g.) "Tue, ", strip it off
+      sb.Remove(0, 4);
+
+      // There's supposed to be a space here but some implementations dont have one
+      TrimStart(sb);
+    }
+
+    CollapseWhitespaces(sb);
+
+    if (!char.IsDigit(sb[1]))
+    {
+      sb.Insert(0, '0');
+    }
+
+    if (sb.Length < 19)
+    {
+      return false;
+    }
+
+    var thereAreSeconds = sb[17] == ':';
+    var timeZoneStartIndex = thereAreSeconds ? 21 : 18;
+
+    if (timeZoneStartIndex > sb.Length)
+    {
+      return false;
+    }
+
+    var timeZoneSuffix = sb.ToString().Substring(timeZoneStartIndex);
+    sb.Remove(timeZoneStartIndex, sb.Length - timeZoneStartIndex);
+
+    sb.Append(NormalizeTimeZone(timeZoneSuffix, out var isUtc));
+
+    var wellFormattedString = sb.ToString();
+
+    var parseFormat = thereAreSeconds ? "dd MMM yyyy HH:mm:ss zzz" : "dd MMM yyyy HH:mm zzz";
+
+    var dateTimeStylesToUse = isUtc ? DateTimeStyles.AdjustToUniversal : DateTimeStyles.None;
+    return DateTimeOffset.TryParseExact(wellFormattedString, parseFormat, CultureInfo.InvariantCulture.DateTimeFormat, dateTimeStylesToUse, out result);
+  }
+
   private static void TrimStart(StringBuilder sb)
   {
-    int i = 0;
+    var i = 0;
     while (i < sb.Length)
     {
       if (!char.IsWhiteSpace(sb[i]))
@@ -192,48 +229,15 @@ internal static class DateTimeUtils
       }
       ++i;
     }
+
     if (i > 0)
     {
       sb.Remove(0, i);
     }
   }
 
-  private static void CollapseWhitespaces(StringBuilder builder)
-  {
-    int index = 0;
-    int whiteSpaceStart = -1;
-    while (index < builder.Length)
-    {
-      if (char.IsWhiteSpace(builder[index]))
-      {
-        if (whiteSpaceStart < 0)
-        {
-          whiteSpaceStart = index;
-          // normalize all white spaces to be ' ' so that the date time parsing works
-          builder[index] = ' ';
-        }
-      }
-      else if (whiteSpaceStart >= 0)
-      {
-        if (index > whiteSpaceStart + 1)
-        {
-          // there are at least 2 spaces... replace by 1
-          builder.Remove(whiteSpaceStart, index - whiteSpaceStart - 1);
-          index = whiteSpaceStart + 1;
-        }
-        whiteSpaceStart = -1;
-      }
-      ++index;
-    }
-    // we have already trimmed the start and end so there cannot be a trail of white spaces in the end
-    //Fx.Assert(builder.Length == 0 || builder[builder.Length - 1] != ' ', "The string builder doesnt end in a white space");
-  }
-
   private static bool TryParseDateRfc3339(string dateTimeString, out DateTimeOffset result)
   {
-    const string Rfc3339LocalDateTimeFormat = "yyyy-MM-ddTHH:mm:sszzz";
-    const string Rfc3339UTCDateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
-
     dateTimeString = dateTimeString.Trim();
 
     if (dateTimeString[19] == '.')
@@ -247,22 +251,18 @@ internal static class DateTimeUtils
       dateTimeString = dateTimeString.Substring(0, 19) + dateTimeString.Substring(i);
     }
 
-    DateTimeOffset localTime;
-    if (DateTimeOffset.TryParseExact(dateTimeString, Rfc3339LocalDateTimeFormat,
-        CultureInfo.InvariantCulture.DateTimeFormat,
-        DateTimeStyles.None, out localTime))
+    if (DateTimeOffset.TryParseExact(dateTimeString, Rfc3339LocalDateTimeFormat, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out var localTime))
     {
       result = localTime;
       return true;
     }
-    DateTimeOffset utcTime;
-    if (DateTimeOffset.TryParseExact(dateTimeString, Rfc3339UTCDateTimeFormat,
-        CultureInfo.InvariantCulture.DateTimeFormat,
-        DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out utcTime))
+
+    if (DateTimeOffset.TryParseExact(dateTimeString, Rfc3339UtcDateTimeFormat, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var utcTime))
     {
       result = utcTime;
       return true;
     }
+
     return false;
   }
 }
