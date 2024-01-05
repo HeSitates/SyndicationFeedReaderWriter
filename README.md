@@ -9,7 +9,7 @@ Microsoft.SyndicationFeed.ReaderWriter provides lightweight forward-only read/wr
 
 ### Building:
 * The solution will build in Visual Studio 2022 after cloning.
-* Prokject is analyzed with SonarCloud:
+* Project is analyzed with SonarCloud:
   [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HeSitates_SyndicationFeedReaderWriter&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=HeSitates_SyndicationFeedReaderWriter)
   [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=HeSitates_SyndicationFeedReaderWriter&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=HeSitates_SyndicationFeedReaderWriter)
   [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=HeSitates_SyndicationFeedReaderWriter&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=HeSitates_SyndicationFeedReaderWriter)
