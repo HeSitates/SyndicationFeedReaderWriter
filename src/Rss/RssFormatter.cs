@@ -122,7 +122,7 @@ public class RssFormatter : ISyndicationFeedFormatter
 
     if (link.Uri == null)
     {
-      throw new ArgumentNullException("Invalid link uri");
+      throw new ArgumentNullException(nameof(link), "Invalid link uri");
     }
 
     switch (link.RelationshipType)
@@ -235,81 +235,29 @@ public class RssFormatter : ISyndicationFeedFormatter
     // Spec requires to have at least one title or description
     if (string.IsNullOrEmpty(item.Title) && string.IsNullOrEmpty(item.Description))
     {
-      if (string.IsNullOrEmpty(item.Title))
-      {
-        throw new ArgumentNullException(nameof(item), "RSS Item requires a title or a description");
-      }
-
-      if (string.IsNullOrEmpty(item.Description))
-      {
-        throw new ArgumentNullException(nameof(item), "RSS Item requires a title or a description");
-      }
+      throw new ArgumentNullException(nameof(item), "RSS Item requires a title or a description");
     }
 
     // Write <item> tag
     var content = new SyndicationContent(RssElementNames.Item);
 
-    //
-    // Title
-    if (!string.IsNullOrEmpty(item.Title))
-    {
-      content.AddField(new SyndicationContent(RssElementNames.Title, item.Title));
-    }
+    CreateAndAddField(content, RssElementNames.Title, item.Title);
 
-    //
-    // Links
-    ISyndicationLink guidLink = null;
+    var guidLink = CreateAndAddLinks(content, item);
 
-    if (item.Links != null)
-    {
-      foreach (var link in item.Links)
-      {
-        if (link.RelationshipType == RssElementNames.Guid)
-        {
-          guidLink = link;
-        }
-
-        content.AddField(CreateContent(link));
-      }
-    }
-
-    //
-    // Description
-    if (!string.IsNullOrEmpty(item.Description))
-    {
-      content.AddField(new SyndicationContent(RssElementNames.Description, item.Description));
-    }
+    CreateAndAddField(content, RssElementNames.Description, item.Description);
 
     //
     // Authors (persons)
-    if (item.Contributors != null)
-    {
-      foreach (var person in item.Contributors)
-      {
-        content.AddField(CreateContent(person));
-      }
-    }
+    CreateAndAddContents(content, item.Contributors, CreateContent);
 
     //
     // Cathegory
-    if (item.Categories != null)
-    {
-      foreach (var category in item.Categories)
-      {
-        content.AddField(CreateContent(category));
-      }
-    }
+    CreateAndAddContents(content, item.Categories, CreateContent);
 
     //
     // Guid (id)
-    if (guidLink == null && !string.IsNullOrEmpty(item.Id))
-    {
-      var guid = new SyndicationContent(RssElementNames.Guid, item.Id);
-
-      guid.AddAttribute(new SyndicationAttribute(RssConstants.IsPermaLink, "false"));
-
-      content.AddField(guid);
-    }
+    CreateAndAddGuidLink(content, guidLink, item.Id);
 
     //
     // PubDate
@@ -321,8 +269,7 @@ public class RssFormatter : ISyndicationFeedFormatter
     return content;
   }
 
-
-  private ISyndicationContent CreateEnclosureContent(ISyndicationLink link)
+  internal ISyndicationContent CreateEnclosureContent(ISyndicationLink link)
   {
     var content = new SyndicationContent(RssElementNames.Enclosure);
 
@@ -334,7 +281,7 @@ public class RssFormatter : ISyndicationFeedFormatter
     // Length
     if (link.Length == 0)
     {
-      throw new ArgumentException("Enclosure requires length attribute");
+      throw new ArgumentException("Enclosure requires length attribute", nameof(link));
     }
 
     content.AddAttribute(new SyndicationAttribute(RssConstants.Length, FormatValue(link.Length)));
@@ -343,11 +290,46 @@ public class RssFormatter : ISyndicationFeedFormatter
     // MediaType
     if (string.IsNullOrEmpty(link.MediaType))
     {
-      throw new ArgumentNullException("Enclosure requires a MediaType");
+      throw new ArgumentNullException(nameof(link), "Enclosure requires a MediaType");
     }
 
     content.AddAttribute(new SyndicationAttribute(RssConstants.Type, link.MediaType));
     return content;
+  }
+
+  private static void CreateAndAddField(SyndicationContent content, string rssElementName, string value)
+  {
+    if (string.IsNullOrEmpty(value))
+    {
+      return;
+    }
+
+    content.AddField(new SyndicationContent(rssElementName, value));
+  }
+
+  private static void CreateAndAddContents<T>(SyndicationContent content, IEnumerable<T> items, Func<T, ISyndicationContent> action)
+  {
+    if (items != null)
+    {
+      foreach (var person in items)
+      {
+        content.AddField(action(person));
+      }
+    }
+  }
+
+  private static void CreateAndAddGuidLink(SyndicationContent content, ISyndicationLink guidLink, string itemId)
+  {
+    if (guidLink != null || string.IsNullOrEmpty(itemId))
+    {
+      return;
+    }
+
+    var guid = new SyndicationContent(RssElementNames.Guid, itemId);
+
+    guid.AddAttribute(new SyndicationAttribute(RssConstants.IsPermaLink, "false"));
+
+    content.AddField(guid);
   }
 
   private ISyndicationContent CreateLinkContent(ISyndicationLink link)
@@ -471,5 +453,26 @@ public class RssFormatter : ISyndicationFeedFormatter
     //
     // Write End
     _writer.WriteEndElement();
+  }
+
+  private ISyndicationLink CreateAndAddLinks(SyndicationContent content, ISyndicationItem item)
+  {
+    if (item.Links == null)
+    {
+      return null;
+    }
+
+    ISyndicationLink guidLink = null;
+    foreach (var link in item.Links)
+    {
+      if (link.RelationshipType == RssElementNames.Guid)
+      {
+        guidLink = link;
+      }
+
+      content.AddField(CreateContent(link));
+    }
+
+    return guidLink;
   }
 }

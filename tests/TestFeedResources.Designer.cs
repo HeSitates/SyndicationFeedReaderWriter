@@ -61,6 +61,91 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to http://contoso.com.
+        /// </summary>
+        internal static string ContosoUrl {
+            get {
+                return ResourceManager.GetString("ContosoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;description&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ADescription&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateContentWithDescriptionOnly {
+            get {
+                return ResourceManager.GetString("CreateContentWithDescriptionOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;description&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ADescription&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateContentWithTitleDescription {
+            get {
+                return ResourceManager.GetString("CreateContentWithTitleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateContentWithTitleOnly {
+            get {
+                return ResourceManager.GetString("CreateContentWithTitleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;rss xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:content=&quot;http://purl.org/rss/1.0/modules/content/&quot; xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; version=&quot;2.0&quot;&gt;
         ///  &lt;channel&gt;
@@ -72,6 +157,33 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         internal static string CustomXml {
             get {
                 return ResourceManager.GetString("CustomXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://contoso.com/syndication/feed/examples.
+        /// </summary>
+        internal static string ExampleNs {
+            get {
+                return ResourceManager.GetString("ExampleNs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://example.com/permalink/example/1523389.
+        /// </summary>
+        internal static string ExampleUrl {
+            get {
+                return ResourceManager.GetString("ExampleUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/dotnet/SyndicationFeedReaderWriter.
+        /// </summary>
+        internal static string GithubUrl {
+            get {
+                return ResourceManager.GetString("GithubUrl", resourceCulture);
             }
         }
         
@@ -126,7 +238,7 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;rss xmlns:example=&quot;http://contoso.com/syndication/feed/examples&quot; version=&quot;2.0&quot;&gt;
         ///  &lt;channel&gt;
         ///  &lt;item&gt;
@@ -136,7 +248,7 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         ///    &lt;category&gt;Technology&lt;/category&gt;
         ///    &lt;guid isPermaLink=&quot;false&quot;&gt;https://github.com/dotnet/wcf/tree/lab/lab/src/Microsoft.SyndicationFeed/src&lt;/guid&gt;
         ///    &lt;pubDate&gt;Mon, 01 Jan 2024 14:44:25 GMT&lt;/pubDate&gt;
-        ///    &lt;example [rest of string was truncated]&quot;;.
+        ///    &lt;example: [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RssFormatterWriterWithNamespacesResult {
             get {
@@ -185,6 +297,226 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         internal static string SimpleRssFeed {
             get {
                 return ResourceManager.GetString("SimpleRssFeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;category&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;Technology&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string WithCategory {
+            get {
+                return ResourceManager.GetString("WithCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;link&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;Test title&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: [
+        ///        {
+        ///          &quot;Name&quot;: &quot;url&quot;,
+        ///          &quot;Namespace&quot;: null,
+        ///          &quot;Value&quot;: &quot;http://contoso.com/&quot;
+        ///        },
+        ///        {
+        ///          &quot;Name&quot;: &quot;type&quot;,
+        ///           [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string WithContosoLink {
+            get {
+                return ResourceManager.GetString("WithContosoLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;managingEditor&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;managingeditor@contoso.com (managingeditor)&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string WithContributor {
+            get {
+                return ResourceManager.GetString("WithContributor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;link&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://github.com/dotnet/SyndicationFeedReaderWriter&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string WithGithubLink {
+            get {
+                return ResourceManager.GetString("WithGithubLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;guid&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;AnId&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: [
+        ///        {
+        ///          &quot;Name&quot;: &quot;isPermaLink&quot;,
+        ///          &quot;Namespace&quot;: null,
+        ///          &quot;Value&quot;: &quot;false&quot;
+        ///        }
+        ///      ]
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string WithId {
+            get {
+                return ResourceManager.GetString("WithId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;guid&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://example.com/permalink/example/1523389&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string WithPermalinkAndId {
+            get {
+                return ResourceManager.GetString("WithPermalinkAndId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;item&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;title&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;ATitle&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;guid&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://example.com/permalink/example/1523389&quot;,
+        ///      &quot;Fields&quot;: [],
+        ///      &quot;Attributes&quot;: []
+        ///    }
+        ///  ],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string WithPermalinkNoId {
+            get {
+                return ResourceManager.GetString("WithPermalinkNoId", resourceCulture);
             }
         }
     }
