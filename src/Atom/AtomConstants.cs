@@ -2,8 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Microsoft.SyndicationFeed.Atom;
 
+[SuppressMessage("Security", "S5332: Using http protocol is insecure", Justification = "Just a namespace here.")]
+[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Suppressing is ok here.")]
 internal static class AtomConstants
 {
   public const string Atom10Namespace = "http://www.w3.org/2005/Atom";
