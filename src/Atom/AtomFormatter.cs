@@ -120,7 +120,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (link.Uri == null)
     {
-      throw new ArgumentNullException("Uri");
+      throw new ArgumentNullException(nameof(link), "Uri");
     }
 
     switch (link.RelationshipType)
@@ -145,7 +145,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (string.IsNullOrEmpty(category.Name))
     {
-      throw new ArgumentNullException("Name");
+      throw new ArgumentNullException(nameof(category), "Name");
     }
 
     var result = new SyndicationContent(AtomElementNames.Category);
@@ -180,7 +180,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (string.IsNullOrEmpty(person.Name))
     {
-      throw new ArgumentNullException("Name");
+      throw new ArgumentNullException(nameof(person), "Name");
     }
 
     string contributorType = person.RelationshipType ?? AtomContributorTypes.Author;
@@ -223,11 +223,10 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (image.Url == null)
     {
-      throw new ArgumentNullException("Url");
+      throw new ArgumentNullException(nameof(image), "Url");
     }
 
-    return new SyndicationContent(!string.IsNullOrEmpty(image.RelationshipType) ? image.RelationshipType : AtomImageTypes.Icon,
-                                  FormatValue(image.Url));
+    return new SyndicationContent(!string.IsNullOrEmpty(image.RelationshipType) ? image.RelationshipType : AtomImageTypes.Icon, FormatValue(image.Url));
   }
 
   public virtual ISyndicationContent CreateContent(ISyndicationItem item)
@@ -239,17 +238,17 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (string.IsNullOrEmpty(item.Id))
     {
-      throw new ArgumentNullException("Id");
+      throw new ArgumentNullException(nameof(item), $"Missing required {item.Id}");
     }
 
     if (string.IsNullOrEmpty(item.Title))
     {
-      throw new ArgumentNullException("Title");
+      throw new ArgumentNullException(nameof(item), $"Missing required {item.Title}");
     }
 
     if (item.LastUpdated == default(DateTimeOffset))
     {
-      throw new ArgumentException("LastUpdated");
+      throw new ArgumentException($"Invalid {nameof(item.LastUpdated)}");
     }
 
     var result = new SyndicationContent(AtomElementNames.Entry);
@@ -286,7 +285,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
         {
           if (hasContentLink)
           {
-            throw new ArgumentNullException("Multiple content links are not allowed");
+            throw new ArgumentNullException(nameof(item), "Multiple content links are not allowed");
           }
 
           hasContentLink = true;

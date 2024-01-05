@@ -53,6 +53,8 @@ internal static class Converter
       return false;
     }
 
+#pragma warning disable S125
+#pragma warning disable S1135
     //
     // TODO: being added in netstandard 2.0
     //if (type.GetTypeInfo().IsEnum)
@@ -62,6 +64,8 @@ internal static class Converter
     //        return true;
     //    }
     //}
+#pragma warning restore S125
+#pragma warning restore S1135
 
     //
     // Uri

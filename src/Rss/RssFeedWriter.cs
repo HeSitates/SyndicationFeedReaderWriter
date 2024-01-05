@@ -157,7 +157,7 @@ public class RssFeedWriter : XmlFeedWriter
     {
       if (h < 0 || h > 23)
       {
-        throw new ArgumentOutOfRangeException("Hour value must be between 0 and 23");
+        throw new ArgumentOutOfRangeException(nameof(hours), "Hour value must be between 0 and 23");
       }
 
       skipHours.AddField(new SyndicationContent("hour", Formatter.FormatValue(h)));
