@@ -64,7 +64,7 @@ internal static class DateTimeUtils
 #pragma warning restore S2583
         {
           // there are at least 2 spaces... replace by 1
-          builder.Remove(whiteSpaceStart, index - whiteSpaceStart - 1);
+          builder.Remove(whiteSpaceStart + 1, index - whiteSpaceStart - 1);
           index = whiteSpaceStart + 1;
         }
 

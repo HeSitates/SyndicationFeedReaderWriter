@@ -22,7 +22,9 @@ public class DateTimeUtilsTests
   [TestCase("abc", "abc")]
   [TestCase("a  bc", "a bc")]
   [TestCase("a\tbc", "a bc")]
-  //[TestCase("a \tbc", "a bc")]
+  [TestCase("a \tbc", "a bc")]
+  [TestCase("a \r\nbc", "a bc")]
+  [TestCase("a\t\r\n\v\fbc", "a bc")]
   public void CollapseWhitespacesShouldReturnExpectedValues(string input, string expectedResult)
   {
     var sb = new StringBuilder(input);
