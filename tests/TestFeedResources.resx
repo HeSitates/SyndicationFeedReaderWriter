@@ -120,6 +120,15 @@
   <data name="ContosoUrl" xml:space="preserve">
     <value>http://contoso.com</value>
   </data>
+  <data name="CreateCommentsBasic" xml:space="preserve">
+    <value>{
+  "Name": "comments",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
   <data name="CreateContentWithDescriptionOnly" xml:space="preserve">
     <value>{
   "Name": "item",
@@ -176,6 +185,223 @@
     }
   ],
   "Attributes": []
+}</value>
+  </data>
+  <data name="CreateEnclosureBasic" xml:space="preserve">
+    <value>{
+  "Name": "enclosure",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    },
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkBasic" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateLinkBasicWithLength" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkBasicWithMediaType" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkBasicWithMediaTypeAndLength" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTest" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTestAndLength" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTestAndMediaType" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTestAndMediaTypeAndLength" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithTitle" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateSourceBasic" xml:space="preserve">
+    <value>{
+  "Name": "source",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateSourceWithEmptyTitle" xml:space="preserve">
+    <value>{
+  "Name": "source",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateSourceWithTitle" xml:space="preserve">
+    <value>{
+  "Name": "source",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    }
+  ]
 }</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

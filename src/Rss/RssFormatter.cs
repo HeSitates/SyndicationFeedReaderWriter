@@ -53,35 +53,35 @@ public class RssFormatter : ISyndicationFeedFormatter
 
   public string Format(ISyndicationCategory category)
   {
-    ISyndicationContent content = CreateContent(category);
+    var content = CreateContent(category);
 
     return Format(content);
   }
 
   public string Format(ISyndicationImage image)
   {
-    ISyndicationContent content = CreateContent(image);
+    var content = CreateContent(image);
 
     return Format(content);
   }
 
   public string Format(ISyndicationPerson person)
   {
-    ISyndicationContent content = CreateContent(person);
+    var content = CreateContent(person);
 
     return Format(content);
   }
 
   public string Format(ISyndicationItem item)
   {
-    ISyndicationContent content = CreateContent(item);
+    var content = CreateContent(item);
 
     return Format(content);
   }
 
   public string Format(ISyndicationLink link)
   {
-    ISyndicationContent content = CreateContent(link);
+    var content = CreateContent(link);
 
     return Format(content);
   }
@@ -93,24 +93,19 @@ public class RssFormatter : ISyndicationFeedFormatter
       return null;
     }
 
-    Type type = typeof(T);
+    var type = typeof(T);
 
-    //
-    // DateTimeOffset
     if (type == typeof(DateTimeOffset))
     {
       return DateTimeUtils.ToRfc1123String((DateTimeOffset)(object)value);
     }
-
-    //
-    // DateTime
+    
     if (type == typeof(DateTime))
     {
       return DateTimeUtils.ToRfc1123String(new DateTimeOffset((DateTime)(object)value));
     }
 
     return value.ToString();
-
   }
 
   public virtual ISyndicationContent CreateContent(ISyndicationLink link)
@@ -125,20 +120,13 @@ public class RssFormatter : ISyndicationFeedFormatter
       throw new ArgumentNullException(nameof(link), "Invalid link uri");
     }
 
-    switch (link.RelationshipType)
+    return link.RelationshipType switch
     {
-      case RssElementNames.Enclosure:
-        return CreateEnclosureContent(link);
-
-      case RssElementNames.Comments:
-        return CreateCommentsContent(link);
-
-      case RssElementNames.Source:
-        return CreateSourceContent(link);
-
-      default:
-        return CreateLinkContent(link);
-    }
+      RssElementNames.Enclosure => CreateEnclosureContent(link),
+      RssElementNames.Comments => CreateCommentsContent(link),
+      RssElementNames.Source => CreateSourceContent(link),
+      _ => CreateLinkContent(link)
+    };
   }
 
   public virtual ISyndicationContent CreateContent(ISyndicationCategory category)
@@ -297,47 +285,37 @@ public class RssFormatter : ISyndicationFeedFormatter
     return content;
   }
 
-  private static void CreateAndAddField(SyndicationContent content, string rssElementName, string value)
+  internal ISyndicationContent CreateCommentsContent(ISyndicationLink link)
   {
-    if (string.IsNullOrEmpty(value))
+    return new SyndicationContent(link.RelationshipType)
     {
-      return;
-    }
-
-    content.AddField(new SyndicationContent(rssElementName, value));
+      Value = FormatValue(link.Uri)
+    };
   }
 
-  private static void CreateAndAddContents<T>(SyndicationContent content, IEnumerable<T> items, Func<T, ISyndicationContent> action)
+  internal ISyndicationContent CreateSourceContent(ISyndicationLink link)
   {
-    if (items != null)
-    {
-      foreach (var person in items)
-      {
-        content.AddField(action(person));
-      }
-    }
-  }
+    var content = new SyndicationContent(link.RelationshipType);
 
-  private static void CreateAndAddGuidLink(SyndicationContent content, ISyndicationLink guidLink, string itemId)
-  {
-    if (guidLink != null || string.IsNullOrEmpty(itemId))
+    var url = FormatValue(link.Uri);
+    if (link.Title != url)
     {
-      return;
+      content.AddAttribute(new SyndicationAttribute(RssElementNames.Url, url));
     }
 
-    var guid = new SyndicationContent(RssElementNames.Guid, itemId);
+    if (!string.IsNullOrEmpty(link.Title))
+    {
+      content.Value = link.Title;
+    }
 
-    guid.AddAttribute(new SyndicationAttribute(RssConstants.IsPermaLink, "false"));
-
-    content.AddField(guid);
+    return content;
   }
 
-  private ISyndicationContent CreateLinkContent(ISyndicationLink link)
+  internal ISyndicationContent CreateLinkContent(ISyndicationLink link)
   {
     SyndicationContent content;
 
-    if (string.IsNullOrEmpty(link.RelationshipType) ||
-        link.RelationshipType == RssLinkTypes.Alternate)
+    if (string.IsNullOrEmpty(link.RelationshipType) || link.RelationshipType == RssLinkTypes.Alternate)
     {
       // Regular <link>
       content = new SyndicationContent(RssElementNames.Link);
@@ -385,34 +363,39 @@ public class RssFormatter : ISyndicationFeedFormatter
     return content;
   }
 
-  private ISyndicationContent CreateCommentsContent(ISyndicationLink link)
+  private static void CreateAndAddField(SyndicationContent content, string rssElementName, string value)
   {
-    return new SyndicationContent(link.RelationshipType)
+    if (string.IsNullOrEmpty(value))
     {
-      Value = FormatValue(link.Uri)
-    };
+      return;
+    }
+
+    content.AddField(new SyndicationContent(rssElementName, value));
   }
 
-  private ISyndicationContent CreateSourceContent(ISyndicationLink link)
+  private static void CreateAndAddContents<T>(SyndicationContent content, IEnumerable<T> items, Func<T, ISyndicationContent> action)
   {
-    var content = new SyndicationContent(link.RelationshipType);
-
-    //
-    // Url
-    var url = FormatValue(link.Uri);
-    if (link.Title != url)
+    if (items != null)
     {
-      content.AddAttribute(new SyndicationAttribute(RssElementNames.Url, url));
+      foreach (var person in items)
+      {
+        content.AddField(action(person));
+      }
+    }
+  }
+
+  private static void CreateAndAddGuidLink(SyndicationContent content, ISyndicationLink guidLink, string itemId)
+  {
+    if (guidLink != null || string.IsNullOrEmpty(itemId))
+    {
+      return;
     }
 
-    //
-    // Title
-    if (!string.IsNullOrEmpty(link.Title))
-    {
-      content.Value = link.Title;
-    }
+    var guid = new SyndicationContent(RssElementNames.Guid, itemId);
 
-    return content;
+    guid.AddAttribute(new SyndicationAttribute(RssConstants.IsPermaLink, "false"));
+
+    content.AddField(guid);
   }
 
   private void WriteSyndicationContent(ISyndicationContent content)

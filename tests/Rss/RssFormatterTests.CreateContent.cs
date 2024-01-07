@@ -2,15 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using Microsoft.SyndicationFeed.Interfaces;
 using Microsoft.SyndicationFeed.ReaderWriter.Tests.Extentions;
 using Microsoft.SyndicationFeed.Rss;
+using Moq;
 
 namespace Microsoft.SyndicationFeed.ReaderWriter.Tests.Rss;
 
-public class RssFormatterTests
+public partial class RssFormatterTests
 {
   [TestCaseSource(nameof(CreateContentMissingTitleAndDescriptionData))]
-  public void CreateContentSyndicationItemShouldHaveTitleOrDescription(SyndicationItem syndicationItem, string expectedExceptionMessage)
+  public void CreateContentSyndicationItemShouldHaveTitleOrDescription(ISyndicationItem syndicationItem, string expectedExceptionMessage)
   {
     var sut = new RssFormatter();
 
@@ -20,7 +22,7 @@ public class RssFormatterTests
   }
 
   [TestCaseSource(nameof(CreateContentValidData))]
-  public void CreateContentSyndicationItemShouldNotThrowAnException(bool useConstructorWithParams, SyndicationItem syndicationItem, string expectedResult)
+  public void CreateContentSyndicationItemShouldNotThrowAnException(bool useConstructorWithParams, ISyndicationItem syndicationItem, string expectedResult)
   {
     RssFormatter sut;
     if (useConstructorWithParams)
@@ -44,11 +46,29 @@ public class RssFormatterTests
     Assert.That(serialized, Is.EqualTo(expectedResult));
   }
 
+  [TestCaseSource(nameof(CreateEnclosureMissingRequiredPropertiesData))]
+  [TestCaseSource(nameof(CreateContentLinkMissingUriData))]
+  public void CreateContentWithSyndicationLinkShouldHaveTitleOrDescription(Type exceptionType, ISyndicationLink syndicationLink, string expectedExceptionMessage)
+  {
+    var sut = new RssFormatter();
+
+    var ex = Assert.Throws(exceptionType, () => sut.CreateContent(syndicationLink));
+    Assert.That(ex, Is.Not.Null);
+    Assert.That(ex.Message, Is.EqualTo(expectedExceptionMessage));
+  }
+
   private static IEnumerable CreateContentMissingTitleAndDescriptionData()
   {
     yield return new TestCaseData(null, "Value cannot be null. (Parameter 'item')");
     yield return new TestCaseData(new SyndicationItem(), "RSS Item requires a title or a description (Parameter 'item')");
     yield return new TestCaseData(SyndicationItemBuilder.Create().Build(), "RSS Item requires a title or a description (Parameter 'item')");
+  }
+
+  private static IEnumerable CreateContentLinkMissingUriData()
+  {
+    yield return new TestCaseData(typeof(ArgumentNullException), null, "Value cannot be null. (Parameter 'link')");
+    var syndicationLinkMock = new Mock<ISyndicationLink>();
+    yield return new TestCaseData(typeof(ArgumentNullException), syndicationLinkMock.Object, "Invalid link uri (Parameter 'link')");
   }
 
   private static IEnumerable CreateContentValidData()
@@ -150,7 +170,7 @@ public class RssFormatterTests
       return this;
     }
 
-    public SyndicationItem Build()
+    public ISyndicationItem Build()
     {
       return _item;
     }

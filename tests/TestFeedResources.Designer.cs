@@ -71,6 +71,21 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;comments&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateCommentsBasic {
+            get {
+                return ResourceManager.GetString("CreateCommentsBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
         ///  &quot;Name&quot;: &quot;item&quot;,
         ///  &quot;Namespace&quot;: null,
         ///  &quot;Value&quot;: null,
@@ -142,6 +157,301 @@ namespace Microsoft.SyndicationFeed.ReaderWriter.Tests {
         internal static string CreateContentWithTitleOnly {
             get {
                 return ResourceManager.GetString("CreateContentWithTitleOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;enclosure&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;length&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;1234&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;type&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;AMediaType&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateEnclosureBasic {
+            get {
+                return ResourceManager.GetString("CreateEnclosureBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;link&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateLinkBasic {
+            get {
+                return ResourceManager.GetString("CreateLinkBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;link&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;ATitle&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;length&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;1234&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkBasicWithLength {
+            get {
+                return ResourceManager.GetString("CreateLinkBasicWithLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;link&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;type&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;AMediaType&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkBasicWithMediaType {
+            get {
+                return ResourceManager.GetString("CreateLinkBasicWithMediaType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;link&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;ATitle&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;type&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;AMediaType&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;length&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;1234&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkBasicWithMediaTypeAndLength {
+            get {
+                return ResourceManager.GetString("CreateLinkBasicWithMediaTypeAndLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;Test&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateLinkWithLinkTypeTest {
+            get {
+                return ResourceManager.GetString("CreateLinkWithLinkTypeTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;Test&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;ATitle&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;length&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;1234&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkWithLinkTypeTestAndLength {
+            get {
+                return ResourceManager.GetString("CreateLinkWithLinkTypeTestAndLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;Test&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;type&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;AMediaType&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkWithLinkTypeTestAndMediaType {
+            get {
+                return ResourceManager.GetString("CreateLinkWithLinkTypeTestAndMediaType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;Test&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;ATitle&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;type&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;AMediaType&quot;
+        ///    },
+        ///    {
+        ///      &quot;Name&quot;: &quot;length&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;1234&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkWithLinkTypeTestAndMediaTypeAndLength {
+            get {
+                return ResourceManager.GetString("CreateLinkWithLinkTypeTestAndMediaTypeAndLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;link&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;ATitle&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateLinkWithTitle {
+            get {
+                return ResourceManager.GetString("CreateLinkWithTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;source&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: []
+        ///}.
+        /// </summary>
+        internal static string CreateSourceBasic {
+            get {
+                return ResourceManager.GetString("CreateSourceBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;source&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: null,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateSourceWithEmptyTitle {
+            get {
+                return ResourceManager.GetString("CreateSourceWithEmptyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Name&quot;: &quot;source&quot;,
+        ///  &quot;Namespace&quot;: null,
+        ///  &quot;Value&quot;: &quot;ATitle&quot;,
+        ///  &quot;Fields&quot;: [],
+        ///  &quot;Attributes&quot;: [
+        ///    {
+        ///      &quot;Name&quot;: &quot;url&quot;,
+        ///      &quot;Namespace&quot;: null,
+        ///      &quot;Value&quot;: &quot;https://contoso.com/podcast&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string CreateSourceWithTitle {
+            get {
+                return ResourceManager.GetString("CreateSourceWithTitle", resourceCulture);
             }
         }
         

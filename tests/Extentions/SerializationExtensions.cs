@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.SyndicationFeed.ReaderWriter.Tests.Extentions;
 
-public static class SerializationExtensions
+internal static class SerializationExtensions
 {
   public static string Serialize<T>(this T value, bool writeIndented = false)
   {
