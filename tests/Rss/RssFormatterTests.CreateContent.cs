@@ -73,19 +73,19 @@ public partial class RssFormatterTests
 
   private static IEnumerable CreateContentValidData()
   {
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithTitle().Build(), TestFeedResources.CreateContentWithTitleOnly).SetName("With only title");
-    yield return new TestCaseData(true, SyndicationItemBuilder.Create().WithTitle().Build(), TestFeedResources.CreateContentWithTitleOnly).SetName("RssFormatter with parameters");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithDescription().Build(), TestFeedResources.CreateContentWithDescriptionOnly).SetName("With only description");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithTitle().WithDescription().Build(), TestFeedResources.CreateContentWithTitleDescription).SetName("With title and description");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink().Build(), TestFeedResources.WithContosoLink).SetName("With contoso link");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithTitle().Build(), RssFormatterResources.CreateContentWithTitleOnly).SetName("With only title");
+    yield return new TestCaseData(true, SyndicationItemBuilder.Create().WithTitle().Build(), RssFormatterResources.CreateContentWithTitleOnly).SetName("RssFormatter with parameters");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithDescription().Build(), RssFormatterResources.CreateContentWithDescriptionOnly).SetName("With only description");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithTitle().WithDescription().Build(), RssFormatterResources.CreateContentWithTitleDescription).SetName("With title and description");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink().Build(), RssFormatterResources.WithContosoLink).SetName("With contoso link");
     var link1 = new SyndicationLink(new Uri(TestFeedResources.GithubUrl));
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink(link1).Build(), TestFeedResources.WithGithubLink).SetName("With github link");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink(link1).Build(), RssFormatterResources.WithGithubLink).SetName("With github link");
     var guidlink = new SyndicationLink(new Uri(TestFeedResources.ExampleUrl), RssElementNames.Guid);
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink(guidlink).Build(), TestFeedResources.WithPermalinkNoId).SetName("With guid link");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink(guidlink).WithId().Build(), TestFeedResources.WithPermalinkAndId).SetName("With guid link and id");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithId().Build(), TestFeedResources.WithId).SetName("With id");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddContributor().Build(), TestFeedResources.WithContributor).SetName("With contributor");
-    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddCategory().Build(), TestFeedResources.WithCategory).SetName("With category");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink(guidlink).Build(), RssFormatterResources.WithPermalinkNoId).SetName("With guid link");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddLink(guidlink).WithId().Build(), RssFormatterResources.WithPermalinkAndId).SetName("With guid link and id");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().WithId().Build(), RssFormatterResources.WithId).SetName("With id");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddContributor().Build(), RssFormatterResources.WithContributor).SetName("With contributor");
+    yield return new TestCaseData(false, SyndicationItemBuilder.Create().AddCategory().Build(), RssFormatterResources.WithCategory).SetName("With category");
   }
 
   private class SyndicationItemBuilder
@@ -170,7 +170,7 @@ public partial class RssFormatterTests
       return this;
     }
 
-    public ISyndicationItem Build()
+    public SyndicationItem Build()
     {
       return _item;
     }

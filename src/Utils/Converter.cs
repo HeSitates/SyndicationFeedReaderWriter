@@ -14,8 +14,6 @@ internal static class Converter
 
     var type = typeof(T);
 
-    //
-    // String
     if (type == typeof(string))
     {
       result = (T)(object)value;
@@ -27,8 +25,6 @@ internal static class Converter
       return false;
     }
 
-    //
-    // DateTimeOffset
     if (type == typeof(DateTimeOffset))
     {
       if (DateTimeUtils.TryParseDate(value, out var dt))
@@ -40,8 +36,6 @@ internal static class Converter
       return false;
     }
 
-    //
-    // DateTime
     if (type == typeof(DateTime))
     {
       if (DateTimeUtils.TryParseDate(value, out var dt))
@@ -55,7 +49,6 @@ internal static class Converter
 
 #pragma warning disable S125
 #pragma warning disable S1135
-    //
     // TODO: being added in netstandard 2.0
     //if (type.GetTypeInfo().IsEnum)
     //{
@@ -67,7 +60,6 @@ internal static class Converter
 #pragma warning restore S125
 #pragma warning restore S1135
 
-    //
     // Uri
     if (type == typeof(Uri))
     {
@@ -80,8 +72,6 @@ internal static class Converter
       return false;
     }
 
-    //
-    // Fall back default
     result = (T)Convert.ChangeType(value, typeof(T));
     return result != null;
   }

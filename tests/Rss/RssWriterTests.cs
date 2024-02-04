@@ -136,8 +136,6 @@ public class RssWriterTests : ReaderWriterTestsBase
   {
     var url = new Uri("https://contoso.com/");
 
-    // 
-    // Construct item
     var item = new SyndicationItem()
     {
       Id = "https://contoso.com/28af09b3-86c7-4dd6-b56f-58aaa17cff62",
@@ -165,8 +163,6 @@ public class RssWriterTests : ReaderWriterTestsBase
 
     item.AddCategory(new SyndicationCategory("Test Category"));
 
-    //
-    // Write
     await using var sw = new StringWriterWithEncoding(Encoding.UTF8);
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
@@ -187,8 +183,6 @@ public class RssWriterTests : ReaderWriterTestsBase
   {
     ISyndicationContent content;
 
-    //
-    // Read
     using var stream = new StringReader(TestFeedResources.CustomXml);
     using var xmlReader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
     {
@@ -196,8 +190,6 @@ public class RssWriterTests : ReaderWriterTestsBase
       content = await reader.ReadContent();
     }
 
-    //
-    // Write
     var sb = new StringBuilder();
 
     await using (var xmlWriter = XmlWriter.Create(sb, new XmlWriterSettings() { Async = true }))
@@ -437,7 +429,6 @@ public class RssWriterTests : ReaderWriterTestsBase
       var formatter = new RssFormatter(attributes, xmlWriter.Settings);
       var writer = new RssFeedWriter(xmlWriter, attributes, formatter);
 
-      // Create item
       var item = new SyndicationItem()
       {
         Title = "Rss Writer Available",
@@ -449,13 +440,10 @@ public class RssWriterTests : ReaderWriterTestsBase
       item.AddCategory(new SyndicationCategory("Technology"));
       item.AddContributor(new SyndicationPerson(null, "test@mail.com"));
 
-      // Format the item as SyndicationContent
       var content = new SyndicationContent(formatter.CreateContent(item));
 
-      // Add custom fields/attributes
       content.AddField(new SyndicationContent("customElement", ExampleNs, "Custom Value"));
 
-      // Write 
       await writer.Write(content);
       await writer.Write(content);
 

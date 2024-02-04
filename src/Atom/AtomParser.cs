@@ -113,7 +113,7 @@ public class AtomParser : ISyndicationFeedParser
     return new SyndicationCategory(term)
     {
       Scheme = content.Attributes.GetAtom(AtomConstants.Scheme),
-      Label = content.Attributes.GetAtom(AtomConstants.Label)
+      Label = content.Attributes.GetAtom(AtomConstants.Label),
     };
   }
 
@@ -139,26 +139,16 @@ public class AtomParser : ISyndicationFeedParser
       throw new ArgumentNullException(nameof(content));
     }
 
-    //
-    // title
     var title = content.Attributes.GetAtom(AtomElementNames.Title);
 
-    // type
     var type = content.Attributes.GetAtom(AtomConstants.Type);
 
-    //
-    // length
     TryParseValue(content.Attributes.GetAtom(AtomConstants.Length), out long length);
 
-    //
-    // rel
     var rel = content.Attributes.GetAtom(AtomConstants.Rel) ?? ((content.Name == AtomElementNames.Link) ? AtomLinkTypes.Alternate : content.Name);
 
-    //
-    // href
     TryParseValue(content.Attributes.GetAtom(AtomConstants.Href), out Uri uri);
 
-    // src
     if (uri == null)
     {
       TryParseValue(content.Attributes.GetAtom(AtomConstants.Source), out uri);
@@ -173,7 +163,7 @@ public class AtomParser : ISyndicationFeedParser
     {
       Title = title,
       Length = length,
-      MediaType = type
+      MediaType = type,
     };
   }
 
@@ -198,25 +188,18 @@ public class AtomParser : ISyndicationFeedParser
 
       switch (field.Name)
       {
-        //
-        // Name
         case AtomElementNames.Name:
           name = field.Value;
           break;
 
-        //
-        // Email
         case AtomElementNames.Email:
           email = field.Value;
           break;
 
-        //
-        // Uri
         case AtomElementNames.Uri:
           uri = field.Value;
           break;
-        //
-        // Unrecognized field
+
         default:
           break;
       }
@@ -248,14 +231,10 @@ public class AtomParser : ISyndicationFeedParser
 
       switch (field.Name)
       {
-        //
-        // Category
         case AtomElementNames.Category:
           item.AddCategory(CreateCategory(field));
           break;
 
-        //
-        // Content
         case AtomElementNames.Content:
 
           item.ContentType = field.Attributes.GetAtom(AtomConstants.Type) ?? AtomConstants.PlainTextContentType;
@@ -271,59 +250,43 @@ public class AtomParser : ISyndicationFeedParser
 
           break;
 
-        //
-        // Author/Contributor
         case AtomContributorTypes.Author:
         case AtomContributorTypes.Contributor:
           item.AddContributor(CreatePerson(field));
           break;
 
-        //
-        // Id
         case AtomElementNames.Id:
           item.Id = field.Value;
           break;
 
-        //
-        // Link
         case AtomElementNames.Link:
           item.AddLink(CreateLink(field));
           break;
 
-        //
-        // Published
         case AtomElementNames.Published:
           if (TryParseValue(field.Value, out DateTimeOffset published))
           {
             item.Published = published;
           }
+
           break;
 
-        //
-        // Rights
         case AtomElementNames.Rights:
           item.Rights = field.Value;
           break;
 
-        //
-        // Source
         case AtomElementNames.Source:
           item.AddLink(CreateSource(field));
           break;
-        //
-        // Summary
+
         case AtomElementNames.Summary:
           item.Summary = field.Value;
           break;
 
-        //
-        // Title
         case AtomElementNames.Title:
           item.Title = field.Value;
           break;
 
-        //
-        // Updated
         case AtomElementNames.Updated:
           if (TryParseValue(field.Value, out DateTimeOffset updated))
           {
@@ -331,8 +294,6 @@ public class AtomParser : ISyndicationFeedParser
           }
           break;
 
-        //
-        // Unrecognized tags
         default:
           break;
       }
@@ -363,8 +324,6 @@ public class AtomParser : ISyndicationFeedParser
 
       switch (field.Name)
       {
-        //
-        // Id
         case AtomElementNames.Id:
 
           if (url == null)
@@ -374,20 +333,14 @@ public class AtomParser : ISyndicationFeedParser
 
           break;
 
-        //
-        // Title
         case AtomElementNames.Title:
           title = field.Value;
           break;
 
-        //
-        // Updated
         case AtomElementNames.Updated:
           TryParseValue(field.Value, out lastUpdated);
           break;
 
-        //
-        // Link
         case AtomElementNames.Link:
           if (url == null)
           {
@@ -395,8 +348,6 @@ public class AtomParser : ISyndicationFeedParser
           }
           break;
 
-        //
-        // Unrecognized
         default:
           break;
       }
@@ -410,7 +361,7 @@ public class AtomParser : ISyndicationFeedParser
     return new SyndicationLink(url, AtomLinkTypes.Source)
     {
       Title = title,
-      LastUpdated = lastUpdated
+      LastUpdated = lastUpdated,
     };
   }
 
@@ -425,8 +376,6 @@ public class AtomParser : ISyndicationFeedParser
 
     var content = new SyndicationContent(reader.LocalName, reader.NamespaceURI, null);
 
-    //
-    // Attributes
     if (reader.HasAttributes)
     {
       while (reader.MoveToNextAttribute())
@@ -447,12 +396,8 @@ public class AtomParser : ISyndicationFeedParser
       reader.MoveToContent();
     }
 
-    //
-    // Content
     if (!reader.IsEmptyElement)
     {
-      //
-      // Xml (applies to <content>)
       if (XmlUtils.IsXmlMediaType(type) && content.IsAtom(AtomElementNames.Content))
       {
         if (reader.NodeType != XmlNodeType.Element)
@@ -466,8 +411,6 @@ public class AtomParser : ISyndicationFeedParser
       {
         reader.ReadStartElement();
 
-        //
-        // Xhtml
         if (XmlUtils.IsXhtmlMediaType(type) && content.IsAtom())
         {
           if (reader.NamespaceURI != AtomConstants.XhtmlNamespace)
@@ -477,14 +420,10 @@ public class AtomParser : ISyndicationFeedParser
 
           content.Value = reader.ReadInnerXml();
         }
-        //
-        // Text/Html
         else if (reader.HasValue)
         {
           content.Value = reader.ReadContentAsString();
         }
-        //
-        // Children
         else
         {
           while (reader.IsStartElement())
@@ -493,7 +432,7 @@ public class AtomParser : ISyndicationFeedParser
           }
         }
 
-        reader.ReadEndElement(); // end
+        reader.ReadEndElement();
       }
     }
     else

@@ -44,7 +44,6 @@ class RssWriteItemWithCustomElement
       item.AddCategory(new SyndicationCategory("Technology"));
       item.AddContributor(new SyndicationPerson("test", "test@mail.com"));
 
-      //
       // Format the item as SyndicationContent
       var content = new SyndicationContent(formatter.CreateContent(item));
 

@@ -262,3 +262,4 @@ Session.vim
 
 # Visual Studio Code
 .vscode/
+*.bak

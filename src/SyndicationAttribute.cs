@@ -9,9 +9,10 @@ namespace Microsoft.SyndicationFeed;
 
 public sealed class SyndicationAttribute : ISyndicationAttribute
 {
-  public SyndicationAttribute(string name, string value) :
-      this(name, null, value)
+  public SyndicationAttribute(string name, string value)
+    : this(name, null, value)
   {
+    // Intentionally left empty.
   }
 
   public SyndicationAttribute(string name, string ns, string value)

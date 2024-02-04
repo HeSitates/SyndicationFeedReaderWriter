@@ -12,5 +12,5 @@ public enum SyndicationElementType
   Link = 3,
   Content = 4,
   Category = 5,
-  Image = 6
+  Image = 6,
 }

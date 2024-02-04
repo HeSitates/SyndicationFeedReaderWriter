@@ -25,6 +25,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Atom\AtomFormatterResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AtomFormatterResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Atom\AtomTestFeedResources.Designer.cs">
+      <DependentUpon>AtomTestFeedResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Rss\RssFormatterResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RssFormatterResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="TestFeedResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -33,6 +48,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Atom\AtomFormatterResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AtomFormatterResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Atom\AtomTestFeedResources.resx">
+      <LastGenOutput>AtomTestFeedResources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Rss\RssFormatterResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RssFormatterResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="TestFeedResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TestFeedResources.Designer.cs</LastGenOutput>

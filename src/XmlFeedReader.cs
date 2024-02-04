@@ -33,8 +33,6 @@ public abstract class XmlFeedReader : ISyndicationFeedReader
   {
     if (_currentSet)
     {
-      //
-      // The reader is already advanced, return status
       _currentSet = false;
       return !_reader.EOF;
     }
@@ -47,8 +45,6 @@ public abstract class XmlFeedReader : ISyndicationFeedReader
       }
       else
       {
-        //
-        // Advance the reader
         return await MoveNext(false);
       }
     }
@@ -82,8 +78,6 @@ public abstract class XmlFeedReader : ISyndicationFeedReader
       await Read();
     }
 
-    //
-    // Any element can be read as ISyndicationContent
     if (ElementType == SyndicationElementType.None)
     {
       throw new InvalidOperationException("Unknown Content");
@@ -191,8 +185,6 @@ public abstract class XmlFeedReader : ISyndicationFeedReader
     }
     while (await XmlUtils.ReadAsync(_reader));
 
-    //
-    // Reset
     ElementType = SyndicationElementType.None;
     ElementName = null;
     _currentSet = false;

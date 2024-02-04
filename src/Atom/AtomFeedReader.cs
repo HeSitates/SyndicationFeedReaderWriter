@@ -21,7 +21,7 @@ public class AtomFeedReader : XmlFeedReader
   }
 
   public AtomFeedReader(XmlReader reader, ISyndicationFeedParser parser)
-      : base(reader, parser)
+    : base(reader, parser)
   {
     _reader = reader;
   }
@@ -39,9 +39,7 @@ public class AtomFeedReader : XmlFeedReader
 
   public virtual async Task<IAtomEntry> ReadEntry()
   {
-    IAtomEntry item = await base.ReadItem() as IAtomEntry;
-
-    if (item == null)
+    if (await ReadItem() is not IAtomEntry item)
     {
       throw new FormatException("Invalid Atom entry");
     }
@@ -83,10 +81,9 @@ public class AtomFeedReader : XmlFeedReader
   private async Task InitRead()
   {
     // Check <feed>
-
     if (_reader.IsStartElement(AtomElementNames.Feed, AtomConstants.Atom10Namespace))
     {
-      //Read <feed>
+      // Read <feed>
       await XmlUtils.ReadAsync(_reader);
     }
     else

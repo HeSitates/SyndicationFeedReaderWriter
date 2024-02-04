@@ -8,13 +8,13 @@ namespace Microsoft.SyndicationFeed.Interfaces;
 
 public interface ISyndicationFeedReader
 {
-  Task<bool> Read();
-
-  Task Skip();
-
   SyndicationElementType ElementType { get; }
 
   string ElementName { get; }
+
+  Task<bool> Read();
+
+  Task Skip();
 
   Task<ISyndicationItem> ReadItem();
 

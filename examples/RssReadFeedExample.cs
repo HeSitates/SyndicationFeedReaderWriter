@@ -25,7 +25,6 @@ class RssReadFeed
       // This will assign as default an Rss20FeedParser as the parser.
       var feedReader = new RssFeedReader(xmlReader);
 
-      //
       // Read the feed
       while (await feedReader.Read())
       {

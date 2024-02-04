@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
@@ -13,6 +14,9 @@ using Microsoft.SyndicationFeed.Utils;
 
 namespace Microsoft.SyndicationFeed.Atom;
 
+[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "It is allowed to overwrite")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Need to add tests")]
+[SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "To be discussed")]
 public class AtomFeedWriter : XmlFeedWriter
 {
   private readonly XmlWriter _writer;
@@ -24,13 +28,13 @@ public class AtomFeedWriter : XmlFeedWriter
   {
   }
 
-  public AtomFeedWriter(XmlWriter writer, IEnumerable<ISyndicationAttribute> attributes, ISyndicationFeedFormatter formatter) :
-      this(writer, formatter, EnsureXmlNs(attributes ?? Enumerable.Empty<ISyndicationAttribute>()))
+  public AtomFeedWriter(XmlWriter writer, IEnumerable<ISyndicationAttribute> attributes, ISyndicationFeedFormatter formatter)
+    : this(writer, formatter, EnsureXmlNs(attributes ?? Enumerable.Empty<ISyndicationAttribute>()))
   {
   }
 
-  private AtomFeedWriter(XmlWriter writer, ISyndicationFeedFormatter formatter, IEnumerable<ISyndicationAttribute> attributes) :
-      base(writer, formatter ?? new AtomFormatter(attributes, writer.Settings))
+  private AtomFeedWriter(XmlWriter writer, ISyndicationFeedFormatter formatter, IEnumerable<ISyndicationAttribute> attributes)
+    : base(writer, formatter ?? new AtomFormatter(attributes, writer.Settings))
   {
     _writer = writer;
     _attributes = attributes;
@@ -125,9 +129,27 @@ public class AtomFeedWriter : XmlFeedWriter
     return XmlUtils.WriteRawAsync(_writer, content);
   }
 
+  private static IEnumerable<ISyndicationAttribute> EnsureXmlNs(IEnumerable<ISyndicationAttribute> attributes)
+  {
+    var xmlnsAttr = attributes.FirstOrDefault(a => a.Name.StartsWith("xmlns") && a.Value == AtomConstants.Atom10Namespace);
+
+    // Insert Atom namespace if it doesn't already exist
+    if (xmlnsAttr != null)
+    {
+      return attributes;
+    }
+
+    var list = new List<ISyndicationAttribute>(attributes);
+    list.Insert(0, new SyndicationAttribute("xmlns", AtomConstants.Atom10Namespace));
+
+    attributes = list;
+
+    return attributes;
+  }
+
   private void StartFeed()
   {
-    ISyndicationAttribute xmlns = _attributes.FirstOrDefault(a => a.Name == "xmlns");
+    var xmlns = _attributes.FirstOrDefault(a => a.Name == "xmlns");
 
     // Write <feed>
     if (xmlns != null)
@@ -149,22 +171,5 @@ public class AtomFeedWriter : XmlFeedWriter
     }
 
     _feedStarted = true;
-  }
-
-  private static IEnumerable<ISyndicationAttribute> EnsureXmlNs(IEnumerable<ISyndicationAttribute> attributes)
-  {
-    ISyndicationAttribute xmlnsAttr = attributes.FirstOrDefault(a => a.Name.StartsWith("xmlns") && a.Value == AtomConstants.Atom10Namespace);
-
-    //
-    // Insert Atom namespace if it doesn't already exist
-    if (xmlnsAttr == null)
-    {
-      var list = new List<ISyndicationAttribute>(attributes);
-      list.Insert(0, new SyndicationAttribute("xmlns", AtomConstants.Atom10Namespace));
-
-      attributes = list;
-    }
-
-    return attributes;
   }
 }

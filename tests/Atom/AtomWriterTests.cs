@@ -129,8 +129,6 @@ public class AtomWriterTests : ReaderWriterTestsBase
     var author = new SyndicationPerson("John Doe", "johndoe@email.com");
     var category = new SyndicationCategory("Lorem Category");
 
-    // 
-    // Construct entry
     var entry = new AtomEntry()
     {
       Id = "https://contoso.com/28af09b3",
@@ -152,8 +150,6 @@ public class AtomWriterTests : ReaderWriterTestsBase
 
     entry.AddCategory(category);
 
-    //
-    // Write
     await using var sw = new StringWriterWithEncoding();
 
     await using (var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings() { Async = true }))
@@ -263,8 +259,6 @@ public class AtomWriterTests : ReaderWriterTestsBase
       var writer = new RssFeedWriter(xmlWriter, attributes);
       var formatter = new AtomFormatter(attributes, xmlWriter.Settings);
 
-      //
-      // Write Rss elements
       await writer.WriteValue(RssElementNames.Title, "Rss Title");
       await writer.Write(author);
       await writer.Write(new SyndicationItem()
@@ -275,8 +269,6 @@ public class AtomWriterTests : ReaderWriterTestsBase
         LastUpdated = DateTimeOffset.UtcNow
       });
 
-      //
-      // Write atom entry
       await writer.WriteRaw(formatter.Format(entry));
 
       await writer.Flush();

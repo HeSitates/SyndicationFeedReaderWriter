@@ -117,38 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContosoUrl" xml:space="preserve">
-    <value>http://contoso.com</value>
+  <data name="CreateContentWithTitleOnly" xml:space="preserve">
+    <value>{
+  "Name": "entry",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "id",
+      "Namespace": null,
+      "Value": "AnId",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "updated",
+      "Namespace": null,
+      "Value": "2024-01-20T00:00:00\u002B01:00",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "author",
+      "Namespace": null,
+      "Value": null,
+      "Fields": [
+        {
+          "Name": "name",
+          "Namespace": null,
+          "Value": "APerson",
+          "Fields": [],
+          "Attributes": []
+        },
+        {
+          "Name": "email",
+          "Namespace": null,
+          "Value": "a@b.nl",
+          "Fields": [],
+          "Attributes": []
+        }
+      ],
+      "Attributes": []
+    },
+    {
+      "Name": "content",
+      "Namespace": null,
+      "Value": "ADescription",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CustomXml" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\CustomXml.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="ExampleNs" xml:space="preserve">
-    <value>http://contoso.com/syndication/feed/examples</value>
-  </data>
-  <data name="ExampleUrl" xml:space="preserve">
-    <value>https://example.com/permalink/example/1523389</value>
-  </data>
-  <data name="GithubUrl" xml:space="preserve">
-    <value>https://github.com/dotnet/SyndicationFeedReaderWriter</value>
-  </data>
-  <data name="internetRssFeed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\internetRssFeed.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="rss20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\rss20.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="rss20_2items" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\rss20-2items.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="RssFormatterWriterWithNamespacesResult" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\RssFormatterWriterWithNamespacesResult.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="simpleAtomFeed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\simpleAtomFeed.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="SimpleRssFeed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TestFeeds\SimpleRssFeed.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="UrlCortosoPodcast" xml:space="preserve">
+    <value>https://contoso.com/podcast</value>
   </data>
 </root>

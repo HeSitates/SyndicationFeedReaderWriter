@@ -70,8 +70,6 @@ internal static class XmlExtentions
     {
       var ns = !string.IsNullOrEmpty(reader.NamespaceURI) ? reader.NamespaceURI : defaultNs;
 
-      //
-      // Start Element
       if (reader.NodeType == XmlNodeType.Element)
       {
         if (ns == null)
@@ -105,8 +103,6 @@ internal static class XmlExtentions
         continue;
       }
 
-      //
-      // End Element
       if (reader.NodeType == XmlNodeType.EndElement)
       {
         writer.WriteEndElement();
@@ -114,8 +110,6 @@ internal static class XmlExtentions
         continue;
       }
 
-      //
-      // Copy Content
       writer.WriteNode(reader, false);
     }
   }

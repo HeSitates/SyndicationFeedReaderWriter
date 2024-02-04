@@ -1,0 +1,594 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateCommentsBasic" xml:space="preserve">
+    <value>{
+  "Name": "comments",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateContentWithDescriptionOnly" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "description",
+      "Namespace": null,
+      "Value": "ADescription",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateContentWithTitleDescription" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "description",
+      "Namespace": null,
+      "Value": "ADescription",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateContentWithTitleOnly" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateEnclosureBasic" xml:space="preserve">
+    <value>{
+  "Name": "enclosure",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    },
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkBasic" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateLinkBasicWithLength" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkBasicWithMediaType" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkBasicWithMediaTypeAndLength" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTest" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTestAndLength" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTestAndMediaType" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithLinkTypeTestAndMediaTypeAndLength" xml:space="preserve">
+    <value>{
+  "Name": "Test",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    },
+    {
+      "Name": "type",
+      "Namespace": null,
+      "Value": "AMediaType"
+    },
+    {
+      "Name": "length",
+      "Namespace": null,
+      "Value": "1234"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateLinkWithTitle" xml:space="preserve">
+    <value>{
+  "Name": "link",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateSourceBasic" xml:space="preserve">
+    <value>{
+  "Name": "source",
+  "Namespace": null,
+  "Value": "https://contoso.com/podcast",
+  "Fields": [],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="CreateSourceWithEmptyTitle" xml:space="preserve">
+    <value>{
+  "Name": "source",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    }
+  ]
+}</value>
+  </data>
+  <data name="CreateSourceWithTitle" xml:space="preserve">
+    <value>{
+  "Name": "source",
+  "Namespace": null,
+  "Value": "ATitle",
+  "Fields": [],
+  "Attributes": [
+    {
+      "Name": "url",
+      "Namespace": null,
+      "Value": "https://contoso.com/podcast"
+    }
+  ]
+}</value>
+  </data>
+  <data name="WithCategory" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "category",
+      "Namespace": null,
+      "Value": "Technology",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="WithContosoLink" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "link",
+      "Namespace": null,
+      "Value": "Test title",
+      "Fields": [],
+      "Attributes": [
+        {
+          "Name": "url",
+          "Namespace": null,
+          "Value": "http://contoso.com/"
+        },
+        {
+          "Name": "type",
+          "Namespace": null,
+          "Value": "mp3/video"
+        },
+        {
+          "Name": "length",
+          "Namespace": null,
+          "Value": "123"
+        }
+      ]
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="WithContributor" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "managingEditor",
+      "Namespace": null,
+      "Value": "managingeditor@contoso.com (managingeditor)",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="WithGithubLink" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "link",
+      "Namespace": null,
+      "Value": "https://github.com/dotnet/SyndicationFeedReaderWriter",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="WithId" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "guid",
+      "Namespace": null,
+      "Value": "AnId",
+      "Fields": [],
+      "Attributes": [
+        {
+          "Name": "isPermaLink",
+          "Namespace": null,
+          "Value": "false"
+        }
+      ]
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="WithPermalinkAndId" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "guid",
+      "Namespace": null,
+      "Value": "https://example.com/permalink/example/1523389",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+  <data name="WithPermalinkNoId" xml:space="preserve">
+    <value>{
+  "Name": "item",
+  "Namespace": null,
+  "Value": null,
+  "Fields": [
+    {
+      "Name": "title",
+      "Namespace": null,
+      "Value": "ATitle",
+      "Fields": [],
+      "Attributes": []
+    },
+    {
+      "Name": "guid",
+      "Namespace": null,
+      "Value": "https://example.com/permalink/example/1523389",
+      "Fields": [],
+      "Attributes": []
+    }
+  ],
+  "Attributes": []
+}</value>
+  </data>
+</root>

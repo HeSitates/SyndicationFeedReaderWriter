@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml;
 using Microsoft.SyndicationFeed.Extentions;
@@ -12,7 +13,9 @@ using Microsoft.SyndicationFeed.Utils;
 
 namespace Microsoft.SyndicationFeed.Rss;
 
-public class RssFormatter : ISyndicationFeedFormatter
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "It is allowed to overwrite them...")]
+public class RssFormatter : ISyndicationFeedFormatter, IDisposable
 {
   private readonly XmlWriter _writer;
   private readonly StringBuilder _buffer;
@@ -99,7 +102,7 @@ public class RssFormatter : ISyndicationFeedFormatter
     {
       return DateTimeUtils.ToRfc1123String((DateTimeOffset)(object)value);
     }
-    
+
     if (type == typeof(DateTime))
     {
       return DateTimeUtils.ToRfc1123String(new DateTimeOffset((DateTime)(object)value));
@@ -125,7 +128,7 @@ public class RssFormatter : ISyndicationFeedFormatter
       RssElementNames.Enclosure => CreateEnclosureContent(link),
       RssElementNames.Comments => CreateCommentsContent(link),
       RssElementNames.Source => CreateSourceContent(link),
-      _ => CreateLinkContent(link)
+      _ => CreateLinkContent(link),
     };
   }
 
@@ -158,14 +161,12 @@ public class RssFormatter : ISyndicationFeedFormatter
       throw new ArgumentNullException(nameof(person));
     }
 
-    //
     // RSS requires Email
     if (string.IsNullOrEmpty(person.Email))
     {
       throw new ArgumentNullException(nameof(person), "Invalid person Email");
     }
 
-    //
     // Real name recommended with RSS e-mail addresses
     // Ex: <author>email@address.com (John Doe)</author>
     var value = string.IsNullOrEmpty(person.Name) ? person.Email : $"{person.Email} ({person.Name})";
@@ -180,7 +181,6 @@ public class RssFormatter : ISyndicationFeedFormatter
       throw new ArgumentNullException(nameof(image));
     }
 
-    // Required URL - Title - Link
     if (string.IsNullOrEmpty(image.Title))
     {
       throw new ArgumentNullException(nameof(image), "Image requires a title");
@@ -198,13 +198,10 @@ public class RssFormatter : ISyndicationFeedFormatter
 
     var content = new SyndicationContent(RssElementNames.Image);
 
-    // Write required contents of image
     content.AddField(new SyndicationContent(RssElementNames.Url, FormatValue(image.Url)));
     content.AddField(new SyndicationContent(RssElementNames.Title, image.Title));
     content.AddField(CreateContent(image.Link));
 
-
-    // Write optional elements
     if (!string.IsNullOrEmpty(image.Description))
     {
       content.AddField(new SyndicationContent(RssElementNames.Description, image.Description));
@@ -220,13 +217,11 @@ public class RssFormatter : ISyndicationFeedFormatter
       throw new ArgumentNullException(nameof(item));
     }
 
-    // Spec requires to have at least one title or description
     if (string.IsNullOrEmpty(item.Title) && string.IsNullOrEmpty(item.Description))
     {
       throw new ArgumentNullException(nameof(item), "RSS Item requires a title or a description");
     }
 
-    // Write <item> tag
     var content = new SyndicationContent(RssElementNames.Item);
 
     CreateAndAddField(content, RssElementNames.Title, item.Title);
@@ -235,20 +230,12 @@ public class RssFormatter : ISyndicationFeedFormatter
 
     CreateAndAddField(content, RssElementNames.Description, item.Description);
 
-    //
-    // Authors (persons)
     CreateAndAddContents(content, item.Contributors, CreateContent);
 
-    //
-    // Cathegory
     CreateAndAddContents(content, item.Categories, CreateContent);
 
-    //
-    // Guid (id)
     CreateAndAddGuidLink(content, guidLink, item.Id);
 
-    //
-    // PubDate
     if (item.Published != DateTimeOffset.MinValue)
     {
       content.AddField(new SyndicationContent(RssElementNames.PubDate, FormatValue(item.Published)));
@@ -257,16 +244,18 @@ public class RssFormatter : ISyndicationFeedFormatter
     return content;
   }
 
+  public void Dispose()
+  {
+    Dispose(true);
+    GC.SuppressFinalize(this);
+  }
+
   internal ISyndicationContent CreateEnclosureContent(ISyndicationLink link)
   {
     var content = new SyndicationContent(RssElementNames.Enclosure);
 
-    //
-    // Url
     content.AddAttribute(new SyndicationAttribute(RssElementNames.Url, FormatValue(link.Uri)));
 
-    //
-    // Length
     if (link.Length == 0)
     {
       throw new ArgumentException("Enclosure requires length attribute", nameof(link));
@@ -274,8 +263,6 @@ public class RssFormatter : ISyndicationFeedFormatter
 
     content.AddAttribute(new SyndicationAttribute(RssConstants.Length, FormatValue(link.Length)));
 
-    //
-    // MediaType
     if (string.IsNullOrEmpty(link.MediaType))
     {
       throw new ArgumentNullException(nameof(link), "Enclosure requires a MediaType");
@@ -289,7 +276,7 @@ public class RssFormatter : ISyndicationFeedFormatter
   {
     return new SyndicationContent(link.RelationshipType)
     {
-      Value = FormatValue(link.Uri)
+      Value = FormatValue(link.Uri),
     };
   }
 
@@ -317,24 +304,18 @@ public class RssFormatter : ISyndicationFeedFormatter
 
     if (string.IsNullOrEmpty(link.RelationshipType) || link.RelationshipType == RssLinkTypes.Alternate)
     {
-      // Regular <link>
       content = new SyndicationContent(RssElementNames.Link);
     }
     else
     {
-      // Custom
       content = new SyndicationContent(link.RelationshipType);
     }
 
-    //
-    // title 
     if (!string.IsNullOrEmpty(link.Title))
     {
       content.Value = link.Title;
     }
 
-    //
-    // url
     var url = FormatValue(link.Uri);
 
     if (content.Value != null)
@@ -346,21 +327,25 @@ public class RssFormatter : ISyndicationFeedFormatter
       content.Value = url;
     }
 
-    //
-    // Type
     if (!string.IsNullOrEmpty(link.MediaType))
     {
       content.AddAttribute(new SyndicationAttribute(RssConstants.Type, link.MediaType));
     }
 
-    //
-    // Lenght
     if (link.Length != 0)
     {
       content.AddAttribute(new SyndicationAttribute(RssConstants.Length, FormatValue(link.Length)));
     }
 
     return content;
+  }
+
+  protected virtual void Dispose(bool disposing)
+  {
+    if (disposing)
+    {
+      _writer?.Dispose();
+    }
   }
 
   private static void CreateAndAddField(SyndicationContent content, string rssElementName, string value)
@@ -400,12 +385,8 @@ public class RssFormatter : ISyndicationFeedFormatter
 
   private void WriteSyndicationContent(ISyndicationContent content)
   {
-    //
-    // Write Start
     _writer.WriteStartSyndicationContent(content, null);
 
-    //
-    // Write attributes
     if (content.Attributes != null)
     {
       foreach (var a in content.Attributes)
@@ -414,14 +395,10 @@ public class RssFormatter : ISyndicationFeedFormatter
       }
     }
 
-    //
-    // Write value
     if (content.Value != null)
     {
       _writer.WriteString(content.Value, UseCDATA);
     }
-    //
-    // Write Fields
     else
     {
       if (content.Fields != null)
@@ -433,8 +410,6 @@ public class RssFormatter : ISyndicationFeedFormatter
       }
     }
 
-    //
-    // Write End
     _writer.WriteEndElement();
   }
 

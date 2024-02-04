@@ -23,27 +23,21 @@ class CreateSimpleRssFeed
     {
       var writer = new RssFeedWriter(xmlWriter);
 
-      //
       // Add Title
       await writer.WriteTitle("Example of RssFeedWriter");
 
-      //
       // Add Description
       await writer.WriteDescription("Hello World, RSS 2.0!");
 
-      //
       // Add Link
       await writer.Write(new SyndicationLink(new Uri("https://github.com/dotnet/SyndicationFeedReaderWriter")));
 
-      //
       // Add managing editor
       await writer.Write(new SyndicationPerson("managingeditor", "managingeditor@contoso.com", RssContributorTypes.ManagingEditor));
 
-      //
       // Add publish date
       await writer.WritePubDate(DateTimeOffset.UtcNow);
 
-      //
       // Add custom element
       var customElement = new SyndicationContent("customElement");
 
@@ -52,7 +46,6 @@ class CreateSimpleRssFeed
 
       await writer.Write(customElement);
 
-      //
       // Add Items
       for (int i = 0; i < 5; ++i)
       {
@@ -71,12 +64,10 @@ class CreateSimpleRssFeed
         await writer.Write(item);
       }
 
-      //
       // Done
       await xmlWriter.FlushAsync();
     }
 
-    //
     // Ouput the feed
     Console.WriteLine(sw.ToString());
   }

@@ -31,8 +31,7 @@ public partial class RssFormatterTests
     var sut = new RssFormatter();
 
     var result = sut.CreateEnclosureContent(syndicationItem);
-    Assert.That(result, Is.Not.Null);
-    Assert.That(result, Is.TypeOf<SyndicationContent>());
+    Assert.That(result, Is.Not.Null.And.TypeOf<SyndicationContent>());
     var serialized = result.Serialize(true);
     TestContext.WriteLine(serialized);
     Assert.That(serialized, Is.EqualTo(expectedResult));
@@ -44,8 +43,7 @@ public partial class RssFormatterTests
     var sut = new RssFormatter();
 
     var result = sut.CreateCommentsContent(syndicationItem);
-    Assert.That(result, Is.Not.Null);
-    Assert.That(result, Is.TypeOf<SyndicationContent>());
+    Assert.That(result, Is.Not.Null.And.TypeOf<SyndicationContent>());
     var serialized = result.Serialize(true);
     TestContext.WriteLine(serialized);
     Assert.That(serialized, Is.EqualTo(expectedResult));
@@ -57,8 +55,7 @@ public partial class RssFormatterTests
     var sut = new RssFormatter();
 
     var result = sut.CreateSourceContent(syndicationItem);
-    Assert.That(result, Is.Not.Null);
-    Assert.That(result, Is.TypeOf<SyndicationContent>());
+    Assert.That(result, Is.Not.Null.And.TypeOf<SyndicationContent>());
     var serialized = result.Serialize(true);
     TestContext.WriteLine(serialized);
     Assert.That(serialized, Is.EqualTo(expectedResult));
@@ -70,8 +67,7 @@ public partial class RssFormatterTests
     var sut = new RssFormatter();
 
     var result = sut.CreateLinkContent(syndicationItem);
-    Assert.That(result, Is.Not.Null);
-    Assert.That(result, Is.TypeOf<SyndicationContent>());
+    Assert.That(result, Is.Not.Null.And.TypeOf<SyndicationContent>());
     var serialized = result.Serialize(true);
     TestContext.WriteLine(serialized);
     Assert.That(serialized, Is.EqualTo(expectedResult));
@@ -91,58 +87,58 @@ public partial class RssFormatterTests
 
   private static IEnumerable CreateEnclosureValidData()
   {
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateEnclosure().WithLength().WithMediaType().Build(), TestFeedResources.CreateEnclosureBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateEnclosure().WithLength().WithMediaType().Build(), RssFormatterResources.CreateEnclosureBasic)
       .SetName("CreateEnclosure basic");
     // The title property of the link is ignored.
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateEnclosure().WithLength().WithMediaType().WithTitle().Build(), TestFeedResources.CreateEnclosureBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateEnclosure().WithLength().WithMediaType().WithTitle().Build(), RssFormatterResources.CreateEnclosureBasic)
       .SetName("CreateEnclosure with title");
     // The lastupdated property of the link is ignored.
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateEnclosure().WithLength().WithMediaType().WithLastUpdated().Build(), TestFeedResources.CreateEnclosureBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateEnclosure().WithLength().WithMediaType().WithLastUpdated().Build(), RssFormatterResources.CreateEnclosureBasic)
       .SetName("CreateEnclosure with last updated");
   }
 
   private static IEnumerable CreateCommentsValidData()
   {
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateComments().Build(), TestFeedResources.CreateCommentsBasic).SetName("CreateComments basic");
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateComments().Build(), RssFormatterResources.CreateCommentsBasic).SetName("CreateComments basic");
     // The title property of the link is ignored.
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateComments().WithTitle().Build(), TestFeedResources.CreateCommentsBasic).SetName("CreateComments with title");
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateComments().WithTitle().Build(), RssFormatterResources.CreateCommentsBasic).SetName("CreateComments with title");
   }
 
   private static IEnumerable CreateSourceValidData()
   {
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateSource().Build(), TestFeedResources.CreateSourceBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateSource().Build(), RssFormatterResources.CreateSourceBasic)
       .SetName("CreateSource basic");
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateSource().WithTitle(string.Empty).Build(), TestFeedResources.CreateSourceWithEmptyTitle)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateSource().WithTitle(string.Empty).Build(), RssFormatterResources.CreateSourceWithEmptyTitle)
       .SetName("CreateSource with empty title");
-    yield return new TestCaseData(SyndicationLinkBuilder.CreateSource().WithTitle().Build(), TestFeedResources.CreateSourceWithTitle)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateSource().WithTitle().Build(), RssFormatterResources.CreateSourceWithTitle)
       .SetName("CreateSource with title");
   }
 
   private static IEnumerable CreateLinkValidData()
   {
-    yield return new TestCaseData(SyndicationLinkBuilder.Create().Build(), TestFeedResources.CreateLinkBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink().Build(), RssFormatterResources.CreateLinkBasic)
       .SetName("CreateLink basic");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create(RssLinkTypes.Alternate).Build(), TestFeedResources.CreateLinkBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink(RssLinkTypes.Alternate).Build(), RssFormatterResources.CreateLinkBasic)
       .SetName("CreateLink basic and alternate link type");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create().WithTitle(string.Empty).Build(), TestFeedResources.CreateLinkBasic)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink().WithTitle(string.Empty).Build(), RssFormatterResources.CreateLinkBasic)
       .SetName("CreateLink with empty title");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create().WithTitle().Build(), TestFeedResources.CreateLinkWithTitle)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink().WithTitle().Build(), RssFormatterResources.CreateLinkWithTitle)
       .SetName("CreateLink with title");
 
-    yield return new TestCaseData(SyndicationLinkBuilder.Create().WithMediaType().Build(), TestFeedResources.CreateLinkBasicWithMediaType)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink().WithMediaType().Build(), RssFormatterResources.CreateLinkBasicWithMediaType)
       .SetName("CreateLink basic with media type");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create().WithLength().Build(), TestFeedResources.CreateLinkBasicWithLength)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink().WithLength().Build(), RssFormatterResources.CreateLinkBasicWithLength)
       .SetName("CreateLink basic with length");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create().WithMediaType().WithLength().Build(), TestFeedResources.CreateLinkBasicWithMediaTypeAndLength)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink().WithMediaType().WithLength().Build(), RssFormatterResources.CreateLinkBasicWithMediaTypeAndLength)
       .SetName("CreateLink basic with media type and length");
 
-    yield return new TestCaseData(SyndicationLinkBuilder.Create("Test").Build(), TestFeedResources.CreateLinkWithLinkTypeTest)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink("Test").Build(), RssFormatterResources.CreateLinkWithLinkTypeTest)
       .SetName("CreateLink link type \"Test\"");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create("Test").WithMediaType().Build(), TestFeedResources.CreateLinkWithLinkTypeTestAndMediaType)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink("Test").WithMediaType().Build(), RssFormatterResources.CreateLinkWithLinkTypeTestAndMediaType)
       .SetName("CreateLink link type \"Test\" with media type");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create("Test").WithLength().Build(), TestFeedResources.CreateLinkWithLinkTypeTestAndLength)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink("Test").WithLength().Build(), RssFormatterResources.CreateLinkWithLinkTypeTestAndLength)
       .SetName("CreateLink link type \"Test\" with length");
-    yield return new TestCaseData(SyndicationLinkBuilder.Create("Test").WithLength().WithMediaType().Build(), TestFeedResources.CreateLinkWithLinkTypeTestAndMediaTypeAndLength)
+    yield return new TestCaseData(SyndicationLinkBuilder.CreateLink("Test").WithLength().WithMediaType().Build(), RssFormatterResources.CreateLinkWithLinkTypeTestAndMediaTypeAndLength)
       .SetName("CreateLink link type \"Test\" with media type and length");
   }
 
@@ -159,7 +155,7 @@ public partial class RssFormatterTests
       }
     }
 
-    public static SyndicationLinkBuilder Create(string linkType = "", Uri uri = null)
+    public static SyndicationLinkBuilder CreateLink(string linkType = "", Uri uri = null)
     {
       if (uri == null)
       {

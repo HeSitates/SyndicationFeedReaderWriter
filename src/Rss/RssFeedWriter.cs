@@ -24,8 +24,8 @@ public class RssFeedWriter : XmlFeedWriter
   {
   }
 
-  public RssFeedWriter(XmlWriter writer, IEnumerable<ISyndicationAttribute> attributes, ISyndicationFeedFormatter formatter) :
-      base(writer, formatter ?? new RssFormatter(attributes, writer.Settings))
+  public RssFeedWriter(XmlWriter writer, IEnumerable<ISyndicationAttribute> attributes, ISyndicationFeedFormatter formatter)
+    : base(writer, formatter ?? new RssFormatter(attributes, writer.Settings))
   {
     _writer = writer;
     _attributes = attributes;

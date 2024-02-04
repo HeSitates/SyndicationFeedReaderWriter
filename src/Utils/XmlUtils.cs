@@ -58,14 +58,15 @@ internal static class XmlUtils
 
   public static XmlReader CreateXmlReader(string value)
   {
-    return XmlReader.Create(new StringReader(value),
-                            new XmlReaderSettings()
-                            {
-                              ConformanceLevel = ConformanceLevel.Fragment,
-                              DtdProcessing = DtdProcessing.Ignore,
-                              IgnoreComments = true,
-                              IgnoreWhitespace = true
-                            });
+    return XmlReader.Create(
+      new StringReader(value),
+      new XmlReaderSettings()
+      {
+        ConformanceLevel = ConformanceLevel.Fragment,
+        DtdProcessing = DtdProcessing.Ignore,
+        IgnoreComments = true,
+        IgnoreWhitespace = true,
+      });
   }
 
   public static XmlWriter CreateXmlWriter(XmlWriterSettings settings, IEnumerable<ISyndicationAttribute> attributes, StringBuilder buffer)
@@ -76,15 +77,11 @@ internal static class XmlUtils
 
     var writer = XmlWriter.Create(buffer, settings);
 
-    //
-    // Apply attributes
     if (attributes == null || !attributes.Any())
     {
       return writer;
     }
 
-    //
-    // Create element wrapper
     var xmlns = attributes.FirstOrDefault(a => a.Name == "xmlns");
 
     if (xmlns != null)
@@ -96,8 +93,6 @@ internal static class XmlUtils
       writer.WriteStartElement("w");
     }
 
-    //
-    // Write attributes
     foreach (var a in attributes)
     {
       if (a != xmlns)

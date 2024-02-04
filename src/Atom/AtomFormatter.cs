@@ -22,14 +22,13 @@ public class AtomFormatter : ISyndicationFeedFormatter
   public AtomFormatter()
       : this(null, null)
   {
+    // Intentionally left empty
   }
 
   public AtomFormatter(IEnumerable<ISyndicationAttribute> knownAttributes, XmlWriterSettings settings)
   {
     _buffer = new StringBuilder();
-    _writer = XmlUtils.CreateXmlWriter(settings?.Clone() ?? new XmlWriterSettings(),
-                                       EnsureAtomNs(knownAttributes ?? Enumerable.Empty<ISyndicationAttribute>()),
-                                       _buffer);
+    _writer = XmlUtils.CreateXmlWriter(settings?.Clone() ?? new XmlWriterSettings(), EnsureAtomNs(knownAttributes ?? Enumerable.Empty<ISyndicationAttribute>()), _buffer);
   }
 
   public bool UseCDATA { get; set; }
@@ -94,15 +93,11 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     Type type = typeof(T);
 
-    //
-    // DateTimeOffset
     if (type == typeof(DateTimeOffset))
     {
       return DateTimeUtils.ToRfc3339String((DateTimeOffset)(object)value);
     }
 
-    //
-    // DateTime
     if (type == typeof(DateTime))
     {
       return DateTimeUtils.ToRfc3339String(new DateTimeOffset((DateTime)(object)value));
@@ -120,7 +115,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (link.Uri == null)
     {
-      throw new ArgumentNullException(nameof(link), "Uri");
+      throw new ArgumentNullException(nameof(link), "Uri cannot be null.");
     }
 
     switch (link.RelationshipType)
@@ -150,19 +145,13 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     var result = new SyndicationContent(AtomElementNames.Category);
 
-    //
-    // term
     result.AddAttribute(new SyndicationAttribute(AtomConstants.Term, category.Name));
 
-    //
-    // scheme
     if (!string.IsNullOrEmpty(category.Scheme))
     {
       result.AddAttribute(new SyndicationAttribute(AtomConstants.Scheme, category.Scheme));
     }
 
-    //
-    // label
     if (!string.IsNullOrEmpty(category.Label))
     {
       result.AddAttribute(new SyndicationAttribute(AtomConstants.Label, category.Label));
@@ -193,19 +182,13 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     var result = new SyndicationContent(contributorType);
 
-    //
-    // name
     result.AddField(new SyndicationContent(AtomElementNames.Name, person.Name));
 
-    //
-    // email
     if (!string.IsNullOrEmpty(person.Email))
     {
       result.AddField(new SyndicationContent(AtomElementNames.Email, person.Email));
     }
 
-    //
-    // uri
     if (person.Uri != null)
     {
       result.AddField(new SyndicationContent(AtomElementNames.Uri, FormatValue(person.Uri)));
@@ -246,36 +229,26 @@ public class AtomFormatter : ISyndicationFeedFormatter
       throw new ArgumentNullException(nameof(item), $"Missing required {item.Title}");
     }
 
-    if (item.LastUpdated == default(DateTimeOffset))
+    if (item.LastUpdated == default)
     {
-      throw new ArgumentException($"Invalid {nameof(item.LastUpdated)}");
+      throw new ArgumentException($"Invalid {nameof(item.LastUpdated)}", nameof(item));
     }
 
     var result = new SyndicationContent(AtomElementNames.Entry);
 
-    //
-    // id
     result.AddField(new SyndicationContent(AtomElementNames.Id, item.Id));
 
-    //
-    // title
     result.AddField(new SyndicationContent(AtomElementNames.Title, item.Title));
 
-    //
-    // updated
     result.AddField(new SyndicationContent(AtomElementNames.Updated, FormatValue(item.LastUpdated)));
 
-    //
-    // published
-    if (item.Published != default(DateTimeOffset))
+    if (item.Published != default)
     {
       result.AddField(new SyndicationContent(AtomElementNames.Published, FormatValue(item.Published)));
     }
 
-    //
-    // link
-    bool hasContentLink = false;
-    bool hasAlternateLink = false;
+    var hasContentLink = false;
+    var hasAlternateLink = false;
 
     if (item.Links != null)
     {
@@ -285,7 +258,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
         {
           if (hasContentLink)
           {
-            throw new ArgumentNullException(nameof(item), "Multiple content links are not allowed");
+            throw new ArgumentException("Multiple content links are not allowed", nameof(item));
           }
 
           hasContentLink = true;
@@ -299,9 +272,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
       }
     }
 
-    //
-    // author/contributor
-    bool hasAuthor = false;
+    var hasAuthor = false;
 
     if (item.Contributors != null)
     {
@@ -321,8 +292,6 @@ public class AtomFormatter : ISyndicationFeedFormatter
       throw new ArgumentException("Author is required");
     }
 
-    //
-    // category
     if (item.Categories != null)
     {
       foreach (var category in item.Categories)
@@ -333,8 +302,6 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     IAtomEntry entry = item as IAtomEntry;
 
-    //
-    // content
     if (!string.IsNullOrEmpty(item.Description))
     {
       if (hasContentLink)
@@ -344,10 +311,7 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
       var content = new SyndicationContent(AtomElementNames.Content, item.Description);
 
-      //
-      // type
-      if (entry != null &&
-          !(string.IsNullOrEmpty(entry.ContentType) || entry.ContentType.Equals(AtomConstants.PlainTextContentType, StringComparison.OrdinalIgnoreCase)))
+      if (entry != null && !(string.IsNullOrEmpty(entry.ContentType) || entry.ContentType.Equals(AtomConstants.PlainTextContentType, StringComparison.OrdinalIgnoreCase)))
       {
         content.AddAttribute(new SyndicationAttribute(AtomConstants.Type, entry.ContentType));
       }
@@ -364,14 +328,12 @@ public class AtomFormatter : ISyndicationFeedFormatter
 
     if (entry != null)
     {
-      //
       // summary
       if (!string.IsNullOrEmpty(entry.Summary))
       {
         result.AddField(new SyndicationContent(AtomElementNames.Summary, entry.Summary));
       }
 
-      //
       // rights
       if (!string.IsNullOrEmpty(entry.Rights))
       {
@@ -382,39 +344,27 @@ public class AtomFormatter : ISyndicationFeedFormatter
     return result;
   }
 
-  private ISyndicationContent CreateFromLink(ISyndicationLink link)
+  internal ISyndicationContent CreateFromLink(ISyndicationLink link)
   {
-    //
-    // link
     var result = new SyndicationContent(AtomElementNames.Link);
 
-    //
-    // title
     if (!string.IsNullOrEmpty(link.Title))
     {
       result.AddAttribute(new SyndicationAttribute(AtomElementNames.Title, link.Title));
     }
 
-    //
-    // href
     result.AddAttribute(new SyndicationAttribute(AtomConstants.Href, FormatValue(link.Uri)));
 
-    //
-    // rel
     if (!string.IsNullOrEmpty(link.RelationshipType))
     {
       result.AddAttribute(new SyndicationAttribute(AtomConstants.Rel, link.RelationshipType));
     }
 
-    //
-    // type
     if (!string.IsNullOrEmpty(link.MediaType))
     {
       result.AddAttribute(new SyndicationAttribute(AtomConstants.Type, link.MediaType));
     }
 
-    //
-    // length
     if (link.Length > 0)
     {
       result.AddAttribute(new SyndicationAttribute(AtomConstants.Length, FormatValue(link.Length)));
@@ -423,18 +373,12 @@ public class AtomFormatter : ISyndicationFeedFormatter
     return result;
   }
 
-  private ISyndicationContent CreateFromContentLink(ISyndicationLink link)
+  internal ISyndicationContent CreateFromContentLink(ISyndicationLink link)
   {
-    //
-    // content
     var result = new SyndicationContent(AtomElementNames.Content);
 
-    //
-    // src
     result.AddAttribute(new SyndicationAttribute(AtomConstants.Source, FormatValue(link.Uri)));
 
-    //
-    // type
     if (!string.IsNullOrEmpty(link.MediaType))
     {
       result.AddAttribute(new SyndicationAttribute(AtomConstants.Type, link.MediaType));
@@ -443,29 +387,21 @@ public class AtomFormatter : ISyndicationFeedFormatter
     return result;
   }
 
-  private ISyndicationContent CreateFromSourceLink(ISyndicationLink link)
+  internal ISyndicationContent CreateFromSourceLink(ISyndicationLink link)
   {
-    //
-    // source
     var result = new SyndicationContent(AtomElementNames.Source);
 
-    //
-    // title
     if (!string.IsNullOrEmpty(link.Title))
     {
       result.AddField(new SyndicationContent(AtomElementNames.Title, link.Title));
     }
 
-    //
-    // link
     result.AddField(CreateFromLink(new SyndicationLink(link.Uri)
     {
       MediaType = link.MediaType,
-      Length = link.Length
+      Length = link.Length,
     }));
 
-    //
-    // updated
     if (link.LastUpdated != default(DateTimeOffset))
     {
       result.AddField(new SyndicationContent(AtomElementNames.Updated, FormatValue(link.LastUpdated)));
@@ -474,16 +410,26 @@ public class AtomFormatter : ISyndicationFeedFormatter
     return result;
   }
 
+  private static IEnumerable<ISyndicationAttribute> EnsureAtomNs(IEnumerable<ISyndicationAttribute> attributes)
+  {
+    // Insert Atom namespace if it doesn't already exist
+    if (!attributes.Any(a => a.Name.StartsWith("xmlns") && a.Value == AtomConstants.Atom10Namespace))
+    {
+      var list = new List<ISyndicationAttribute>(attributes);
+      list.Insert(0, new SyndicationAttribute("xmlns", AtomConstants.Atom10Namespace));
+
+      attributes = list;
+    }
+
+    return attributes;
+  }
+
   private void WriteSyndicationContent(ISyndicationContent content)
   {
     string type = null;
 
-    //
-    // Write Start
     _writer.WriteStartSyndicationContent(content, AtomConstants.Atom10Namespace);
 
-    //
-    // Write attributes
     if (content.Attributes != null)
     {
       foreach (var a in content.Attributes)
@@ -497,33 +443,23 @@ public class AtomFormatter : ISyndicationFeedFormatter
       }
     }
 
-    //
-    // Write value
     if (content.Value != null)
     {
-      //
-      // Xhtml
       if (XmlUtils.IsXhtmlMediaType(type) && content.IsAtom())
       {
         _writer.WriteStartElement("div", AtomConstants.XhtmlNamespace);
         _writer.WriteXmlFragment(content.Value, AtomConstants.XhtmlNamespace);
         _writer.WriteEndElement();
       }
-      //
-      // Xml (applies to <content>)
       else if (XmlUtils.IsXmlMediaType(type) && content.IsAtom(AtomElementNames.Content))
       {
         _writer.WriteXmlFragment(content.Value, string.Empty);
       }
-      //
-      // Text/Html
       else
       {
         _writer.WriteString(content.Value, UseCDATA);
       }
     }
-    //
-    // Write Fields
     else
     {
       if (content.Fields != null)
@@ -535,24 +471,6 @@ public class AtomFormatter : ISyndicationFeedFormatter
       }
     }
 
-    //
-    // Write End
     _writer.WriteEndElement();
-  }
-
-  private static IEnumerable<ISyndicationAttribute> EnsureAtomNs(IEnumerable<ISyndicationAttribute> attributes)
-  {
-    //
-    // Insert Atom namespace if it doesn't already exist
-    if (!attributes.Any(a => a.Name.StartsWith("xmlns") &&
-        a.Value == AtomConstants.Atom10Namespace))
-    {
-      var list = new List<ISyndicationAttribute>(attributes);
-      list.Insert(0, new SyndicationAttribute("xmlns", AtomConstants.Atom10Namespace));
-
-      attributes = list;
-    }
-
-    return attributes;
   }
 }

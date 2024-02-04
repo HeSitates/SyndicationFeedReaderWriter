@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using Microsoft.SyndicationFeed.Extentions;
 using Microsoft.SyndicationFeed.Interfaces;
@@ -10,6 +11,8 @@ using Microsoft.SyndicationFeed.Utils;
 
 namespace Microsoft.SyndicationFeed.Rss;
 
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "It is allowed to overwrite them...")]
 public class RssParser : ISyndicationFeedParser
 {
   public ISyndicationCategory ParseCategory(string value)
@@ -108,49 +111,35 @@ public class RssParser : ISyndicationFeedParser
 
       switch (field.Name)
       {
-        //
-        // Title
         case RssElementNames.Title:
           item.Title = field.Value;
           break;
 
-        //
-        // Link
         case RssElementNames.Link:
           item.AddLink(CreateLink(field));
           break;
 
-        // Description
         case RssElementNames.Description:
           item.Description = field.Value;
           break;
 
-        //
-        // Author
         case RssElementNames.Author:
           item.AddContributor(CreatePerson(field));
           break;
 
-        //
-        // Category
         case RssElementNames.Category:
           item.AddCategory(CreateCategory(field));
           break;
 
-        //
-        // Links
         case RssElementNames.Comments:
         case RssElementNames.Enclosure:
         case RssElementNames.Source:
           item.AddLink(CreateLink(field));
           break;
 
-        //
-        // Guid
         case RssElementNames.Guid:
           item.Id = field.Value;
 
-          // isPermaLink
           var isPermaLinkAttr = field.Attributes.GetRss(RssConstants.IsPermaLink);
 
           if ((isPermaLinkAttr == null || (TryParseValue(isPermaLinkAttr, out bool isPermalink) && isPermalink)) &&
@@ -161,13 +150,12 @@ public class RssParser : ISyndicationFeedParser
 
           break;
 
-        //
-        // PubDate
         case RssElementNames.PubDate:
           if (TryParseValue(field.Value, out DateTimeOffset dt))
           {
             item.Published = dt;
           }
+
           break;
 
         default:
@@ -185,14 +173,10 @@ public class RssParser : ISyndicationFeedParser
       throw new ArgumentNullException(nameof(content));
     }
 
-    //
-    // Title
     string title = content.Value;
 
-    //
-    // Url
     Uri uri;
-    string url = content.Attributes.GetRss("url");
+    var url = content.Attributes.GetRss("url");
 
     if (url != null)
     {
@@ -211,23 +195,17 @@ public class RssParser : ISyndicationFeedParser
       title = null;
     }
 
-    //
-    // Length
     TryParseValue(content.Attributes.GetRss("length"), out long length);
 
-    //
-    // Type
     var type = content.Attributes.GetRss("type");
 
-    //
-    // rel
     var rel = (content.Name == RssElementNames.Link) ? RssLinkTypes.Alternate : content.Name;
 
     return new SyndicationLink(uri, rel)
     {
       Title = title,
       Length = length,
-      MediaType = type
+      MediaType = type,
     };
   }
 
@@ -243,10 +221,8 @@ public class RssParser : ISyndicationFeedParser
       throw new ArgumentNullException(nameof(content), "Content value is required");
     }
 
-    //
     // Handle real name parsing
     // Ex: <author>abc@def.com (John Doe)</author>
-
     var email = content.Value;
     string name = null;
 
@@ -290,29 +266,22 @@ public class RssParser : ISyndicationFeedParser
 
       switch (field.Name)
       {
-        //
-        // Title
         case RssElementNames.Title:
           title = field.Value;
           break;
 
-        //
-        // Url
         case RssElementNames.Url:
           if (!TryParseValue(field.Value, out url))
           {
             throw new FormatException($"Invalid image url '{field.Value}'");
           }
+
           break;
 
-        //
-        // Link
         case RssElementNames.Link:
           link = CreateLink(field);
           break;
 
-        //
-        // Description
         case RssElementNames.Description:
           description = field.Value;
           break;
@@ -331,7 +300,7 @@ public class RssParser : ISyndicationFeedParser
     {
       Title = title,
       Description = description,
-      Link = link
+      Link = link,
     };
   }
 
@@ -349,7 +318,7 @@ public class RssParser : ISyndicationFeedParser
 
     return new SyndicationCategory(content.Value)
     {
-      Scheme = content.Attributes.GetRss(RssConstants.Domain)
+      Scheme = content.Attributes.GetRss(RssConstants.Domain),
     };
   }
 
@@ -357,13 +326,11 @@ public class RssParser : ISyndicationFeedParser
   {
     var content = new SyndicationContent(reader.LocalName, reader.NamespaceURI, null);
 
-    //
-    // Attributes
     if (reader.HasAttributes)
     {
       while (reader.MoveToNextAttribute())
       {
-        ISyndicationAttribute attr = reader.ReadSyndicationAttribute();
+        var attr = reader.ReadSyndicationAttribute();
 
         if (attr != null)
         {
@@ -374,20 +341,14 @@ public class RssParser : ISyndicationFeedParser
       reader.MoveToContent();
     }
 
-    //
-    // Content
     if (!reader.IsEmptyElement)
     {
       reader.ReadStartElement();
 
-      //
-      // Value
       if (reader.HasValue)
       {
         content.Value = reader.ReadContentAsString();
       }
-      //
-      // Children
       else
       {
         while (reader.IsStartElement())
@@ -396,7 +357,7 @@ public class RssParser : ISyndicationFeedParser
         }
       }
 
-      reader.ReadEndElement(); // end
+      reader.ReadEndElement();
     }
     else
     {
